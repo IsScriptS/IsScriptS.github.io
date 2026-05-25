@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>TTD Value List</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b0e17;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            color: #eef2ff;
+        }
+
+        .app-layout {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-row {
+            display: flex;
+            flex: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .categories-sidebar {
+            width: 260px;
+            background: #0c0f18;
+            border-right: 1px solid #1e2335;
+            flex-shrink: 0;
+            height: calc(100vh - 280px);
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 24px 0 30px 0;
+        }
+
+        .categories-header {
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 0 20px 16px 24px;
+            border-bottom: 1px solid #1e2335;
+            margin-bottom: 16px;
+            color: #b9c3f0;
+            letter-spacing: 0.5px;
+        }
+
+        .category-item {
+            padding: 10px 20px 10px 32px;
+            cursor: pointer;
+            transition: all 0.12s;
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: #b0b9dc;
+        }
+
+        .category-item:hover {
+            background: #13182a;
+            border-left-color: #6c7bdb;
+            color: white;
+        }
+
+        .category-item.active {
+            background: #1a1f32;
+            border-left-color: #f5b042;
+            color: white;
+            font-weight: 500;
+        }
+
+        .category-icon {
+            font-size: 1rem;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 24px 28px;
+            overflow-y: auto;
+        }
+
+        .partner-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid #2a2e3f;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .partner {
+            color: #9aa4bf;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .partner-creator {
+            background: #1a1f32;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            color: #f5b042;
+        }
+
+        .take-me-there {
+            color: #6c7bdb;
+            font-weight: 600;
+            background: rgba(108, 123, 219, 0.12);
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+        }
+
+        .control-panel {
+            background: #10131f;
+            border-radius: 24px;
+            padding: 16px 22px;
+            margin: 16px 0 24px 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 16px;
+            justify-content: space-between;
+        }
+
+        .search-area input {
+            background: #1e2337;
+            border: 1px solid #2e354f;
+            padding: 10px 18px;
+            border-radius: 40px;
+            color: white;
+            font-size: 0.85rem;
+            width: 240px;
+            outline: none;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group select, .filter-group button {
+            background: #1a1f31;
+            border: 1px solid #2e354f;
+            padding: 8px 14px;
+            border-radius: 30px;
+            color: #e0e6ff;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .sort-by {
+            background: #0e1220;
+            padding: 6px 16px;
+            border-radius: 32px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tier-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff, #aab3e0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .item-card {
+            background: #111522;
+            border-radius: 24px;
+            padding: 18px 20px;
+            border: 1px solid #222838;
+            transition: 0.15s;
+        }
+
+        .item-card:hover {
+            border-color: #4c5a8c;
+        }
+
+        .item-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            letter-spacing: -0.2px;
+        }
+
+        .value-row {
+            background: #0c1020;
+            border-radius: 16px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .value-label {
+            font-size: 0.75rem;
+            color: #8d99c6;
+        }
+
+        .value-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .value-control button {
+            background: #2a2f48;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            width: 32px;
+            height: 32px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .value-control button:hover {
+            background: #4a5a8a;
+        }
+
+        .current-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 0.75rem;
+            border-bottom: 1px dashed #252c40;
+        }
+
+        .detail-label {
+            color: #8f99c2;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .stability-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+        }
+
+        .doing-well { background: #2c5f8a; color: #b8e2ff; }
+        .stable { background: #2d4059; color: #bedbff; }
+        .underpaid { background: #7a5a2c; color: #ffe1a0; }
+        .overpaid { background: #2a6b3c; color: #b8ffcf; }
+
+        .no-results {
+            text-align: center;
+            padding: 60px;
+            color: #7a85b0;
+            grid-column: 1 / -1;
+        }
+
+        .calculator-section {
+            background: #0c0f18;
+            border-top: 2px solid #1e2335;
+            padding: 20px 28px;
+            width: 100%;
+        }
+
+        .calculator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .calculator-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f5b042, #ffdc97);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .clear-calc-btn {
+            background: #6b2e4a;
+            border: none;
+            color: #ffbcda;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .clear-calc-btn:hover {
+            background: #8a3b60;
+        }
+
+        .calculator-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 8px 4px;
+        }
+
+        .calc-unit {
+            background: #1a1f32;
+            border-radius: 20px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+
+        .calc-unit-name {
+            font-weight: 600;
+        }
+
+        .calc-unit-value {
+            color: #f5b042;
+            font-weight: 700;
+        }
+
+        .calc-unit-count {
+            background: #2c3550;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: #ffdc97;
+        }
+
+        .remove-unit-btn {
+            background: #2a1f2c;
+            border: none;
+            color: #ffaa88;
+            cursor: pointer;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+        }
+
+        .calculator-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #1e2335;
+            font-size: 1.2rem;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .total-label {
+            font-weight: 600;
+            color: #b9c3f0;
+        }
+
+        .total-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f5b042, #ffdc97);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .total-range {
+            font-size: 0.9rem;
+            color: #8d99c6;
+            margin-left: 12px;
+        }
+
+        .empty-calc {
+            color: #6f7aa3;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.85rem;
+            width: 100%;
+        }
+
+        @media (max-width: 800px) {
+            .main-row { flex-direction: column; }
+            .categories-sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid #1e2335; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-layout">
+    <div class="main-row">
+        <div class="categories-sidebar">
+            <div class="categories-header">📂 CATEGORIES:</div>
+            <div id="categoriesList"></div>
+        </div>
+
+        <div class="main-content">
+            <div class="partner-bar">
+                <div class="partner">
+                    <span>partner:</span>
+                    <span class="partner-creator">@Kola2_l</span>
+                    <span class="partner-creator">Xmyrni_Alkogolik</span>
+                </div>
+                <div class="take-me-there">Take me there →</div>
+            </div>
+
+            <div class="control-panel">
+                <div class="search-area">
+                    <input type="text" id="searchInput" placeholder="Type item name here... Search In-Page">
+                </div>
+                <div class="filter-group">
+                    <select id="stabilitySelect">
+                        <option value="all">Select Stability ▼</option>
+                        <option value="Doing Well">Doing Well</option>
+                        <option value="Stable">Stable</option>
+                        <option value="Underpaid For">Underpaid For</option>
+                        <option value="Overpaid For">Overpaid For</option>
+                    </select>
+                    <button id="filterBtn">Filter Items</button>
+                    <button id="clearBtn">Clear</button>
+                </div>
+                <div class="sort-by">
+                    <span>Sort by:</span>
+                    <select id="sortSelect">
+                        <option value="value-high">Value (High→Low)</option>
+                        <option value="value-low">Value (Low→High)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="tier-section">
+                <div class="tier-title">✦ TTD Value List</div>
+                <div id="itemsGrid" class="items-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="calculator-section">
+        <div class="calculator-header">
+            <div class="calculator-title">🧮 VALUE CALCULATOR</div>
+            <button id="clearCalculatorBtn" class="clear-calc-btn">🗑️ Clear All</button>
+        </div>
+        <div id="calculatorItemsList" class="calculator-items">
+            <div class="empty-calc">No units added. Click +1 or -1 on any unit to add to calculator.</div>
+        </div>
+        <div class="calculator-total">
+            <span class="total-label">💰 TOTAL VALUE (Ranged):</span>
+            <div>
+                <span class="total-value" id="calculatorTotal">0</span>
+                <span class="total-range" id="calculatorTotalRange"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const unitsDatabase = [
+        { id: 1, name: "Camerawoman", rarity: "Basic", rangedValue: "1", stability: "Underpaid For", lastChange: "+0", category: "Basic" },
+        { id: 2, name: "Speakerman", rarity: "Basic", rangedValue: "0", stability: "Stable", lastChange: "+0", category: "Basic" },
+        { id: 3, name: "Car Speakerman", rarity: "Uncommon", rangedValue: "1", stability: "Stable", lastChange: "+0", category: "Uncommon" },
+        { id: 4, name: "Cameraman", rarity: "Uncommon", rangedValue: "1", stability: "Stable", lastChange: "+0", category: "Uncommon" },
+        { id: 5, name: "Tv Man", rarity: "Rare", rangedValue: "1-2", stability: "Stable", lastChange: "+0", category: "Rare" },
+        { id: 6, name: "Large Speakerman", rarity: "Rare", rangedValue: "2", stability: "Stable", lastChange: "+0", category: "Rare" },
+        { id: 7, name: "Speaker Helicopter", rarity: "Rare", rangedValue: "1-2", stability: "Stable", lastChange: "+0", category: "Rare" },
+        { id: 8, name: "Camer Helicopter", rarity: "Epic", rangedValue: "13-18", stability: "Stable", lastChange: "+1", category: "Epic" },
+        { id: 9, name: "Large Tv Man", rarity: "Epic", rangedValue: "10", stability: "Stable", lastChange: "+0", category: "Epic" },
+        { id: 10, name: "Large Cameraman", rarity: "Epic", rangedValue: "11", stability: "Stable", lastChange: "+0", category: "Epic" },
+        { id: 11, name: "Surveillance Camerawoman", rarity: "Epic", rangedValue: "7-10", stability: "Stable", lastChange: "+0", category: "Epic" },
+        { id: 12, name: "Medic Cameraman", rarity: "Epic", rangedValue: "6-10", stability: "Underpaid For", lastChange: "-1", category: "Epic" },
+        { id: 13, name: "Secret Agent", rarity: "Legendary", rangedValue: "50-55", stability: "Underpaid For", lastChange: "-3", category: "Legendary" },
+        { id: 14, name: "Dark Speakerman", rarity: "Legendary", rangedValue: "55-60", stability: "Underpaid For", lastChange: "+0", category: "Legendary" },
+        { id: 15, name: "Ninja Cameraman", rarity: "Legendary", rangedValue: "65-70", stability: "Doing Well", lastChange: "+5", category: "Legendary" },
+        { id: 16, name: "Dancing Speakerwomen", rarity: "Legendary", rangedValue: "50-60", stability: "Underpaid For", lastChange: "-2", category: "Legendary" },
+        { id: 17, name: "Titan Speakerman", rarity: "Legendary", rangedValue: "60-65", stability: "Stable", lastChange: "+5", category: "Legendary" },
+        { id: 18, name: "Mech Cameraman", rarity: "Legendary", rangedValue: "110-120", stability: "Doing Well", lastChange: "+5", category: "Legendary" },
+        { id: 19, name: "Laser Cameraman Car", rarity: "Legendary", rangedValue: "120-130", stability: "Overpaid For", lastChange: "+10", category: "Legendary" },
+        { id: 20, name: "Titan Cinemaman", rarity: "Mythic", rangedValue: "1000-1100", stability: "Stable", lastChange: "+0", category: "Mythic" },
+        { id: 21, name: "Upgraded Titan Speakerman", rarity: "Mythic", rangedValue: "1500-1600", stability: "Stable", lastChange: "+50", category: "Mythic" },
+        { id: 22, name: "Upgraded Titan Cameraman", rarity: "Mythic", rangedValue: "2000-2200", stability: "Doing Well", lastChange: "+50", category: "Mythic" },
+        { id: 23, name: "Speaker Spider", rarity: "Exclusive", rangedValue: "50-60", stability: "Stable", lastChange: "-5", category: "Exclusive" },
+        { id: 24, name: "Camera Spider", rarity: "Exclusive", rangedValue: "70-90", stability: "Stable", lastChange: "+5", category: "Exclusive" },
+        { id: 25, name: "Camera Repair Drone", rarity: "Exclusive", rangedValue: "130-150", stability: "Stable", lastChange: "+0", category: "Exclusive" },
+        { id: 26, name: "Jetpack Cameraman", rarity: "Exclusive", rangedValue: "190-220", stability: "Stable", lastChange: "+5", category: "Exclusive" },
+        { id: 27, name: "Titan Cameraman", rarity: "Exclusive", rangedValue: "190-200", stability: "Stable", lastChange: "+0", category: "Exclusive" },
+        { id: 28, name: "Tv Woman", rarity: "Exclusive", rangedValue: "60-65", stability: "Stable", lastChange: "+0", category: "Exclusive" },
+        { id: 29, name: "Scientist Cameraman", rarity: "Exclusive", rangedValue: "150-170", stability: "Doing Well", lastChange: "+5", category: "Exclusive" },
+        { id: 30, name: "Large Scientist Cameraman", rarity: "Exclusive", rangedValue: "90-100", stability: "Stable", lastChange: "+0", category: "Exclusive" },
+        { id: 31, name: "Tv Spider", rarity: "Exclusive", rangedValue: "20000+", stability: "Overpaid For", lastChange: "+1000", category: "Exclusive" },
+        { id: 32, name: "Engineer Cameraman", rarity: "Exclusive", rangedValue: "13000+", stability: "Overpaid For", lastChange: "+500", category: "Exclusive" }
+    ];
+
+    const rarityOrder = ["Basic", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Exclusive"];
+    let currentCategory = "Basic";
+    
+    // Калькулятор: массив объектов { id, name, rangedValue, minVal, maxVal } - можно добавлять дубликаты
+    let calculatorItems = [];
+
+    function getStabilityClass(stability) {
+        if (stability === "Doing Well") return "doing-well";
+        if (stability === "Stable") return "stable";
+        if (stability === "Underpaid For") return "underpaid";
+        if (stability === "Overpaid For") return "overpaid";
+        return "stable";
+    }
+
+    function getMinValue(rangedValue) {
+        if (rangedValue.includes('-')) {
+            return parseInt(rangedValue.split('-')[0]);
+        } else if (rangedValue.includes('+')) {
+            return parseInt(rangedValue.replace('+', ''));
+        } else {
+            return parseInt(rangedValue);
+        }
+    }
+
+    function getMaxValue(rangedValue) {
+        if (rangedValue.includes('-')) {
+            return parseInt(rangedValue.split('-')[1]);
+        } else if (rangedValue.includes('+')) {
+            return parseInt(rangedValue.replace('+', '')) + 500;
+        } else {
+            return parseInt(rangedValue);
+        }
+    }
+
+    function getCalculatorTotal() {
+        let totalMin = 0;
+        let totalMax = 0;
+        for (let item of calculatorItems) {
+            totalMin += item.minVal;
+            totalMax += item.maxVal;
+        }
+        return { min: totalMin, max: totalMax };
+    }
+
+    function updateCalculatorUI() {
+        const container = document.getElementById('calculatorItemsList');
+        const totalSpan = document.getElementById('calculatorTotal');
+        const totalRangeSpan = document.getElementById('calculatorTotalRange');
+        
+        if (calculatorItems.length === 0) {
+            container.innerHTML = '<div class="empty-calc">No units added. Click +1 or -1 on any unit to add to calculator.</div>';
+            totalSpan.innerText = '0';
+            totalRangeSpan.innerText = '';
+            return;
+        }
+        
+        // Группируем по имени для отображения количества
+        const grouped = {};
+        for (let item of calculatorItems) {
+            if (!grouped[item.name]) {
+                grouped[item.name] = { count: 0, rangedValue: item.rangedValue, id: item.id };
+            }
+            grouped[item.name].count++;
+        }
+        
+        let html = '';
+        for (let name in grouped) {
+            const info = grouped[name];
+            html += `
+                <div class="calc-unit" data-id="${info.id}">
+                    <span class="calc-unit-name">${name}</span>
+                    <span class="calc-unit-value">${info.rangedValue}</span>
+                    <span class="calc-unit-count">x${info.count}</span>
+                    <button class="remove-unit-btn" data-name="${name}">✕</button>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+        
+        const totals = getCalculatorTotal();
+        if (totals.min === totals.max) {
+            totalSpan.innerText = totals.min.toLocaleString();
+            totalRangeSpan.innerText = '';
+        } else {
+            totalSpan.innerText = `${totals.min.toLocaleString()} - ${totals.max.toLocaleString()}`;
+            totalRangeSpan.innerText = '';
+        }
+        
+        document.querySelectorAll('.remove-unit-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const name = btn.getAttribute('data-name');
+                // Удаляем один экземпляр с таким именем (последний добавленный)
+                const index = calculatorItems.findLastIndex(item => item.name === name);
+                if (index !== -1) calculatorItems.splice(index, 1);
+                updateCalculatorUI();
+            });
+        });
+    }
+
+    function addToCalculator(unitId) {
+        const unit = unitsDatabase.find(u => u.id === unitId);
+        if (unit) {
+            calculatorItems.push({
+                id: unit.id,
+                name: unit.name,
+                rangedValue: unit.rangedValue,
+                minVal: getMinValue(unit.rangedValue),
+                maxVal: getMaxValue(unit.rangedValue)
+            });
+            updateCalculatorUI();
+        }
+    }
+
+    function removeFromCalculator(unitId) {
+        const index = calculatorItems.findLastIndex(item => item.id === unitId);
+        if (index !== -1) calculatorItems.splice(index, 1);
+        updateCalculatorUI();
+    }
+
+    function clearCalculator() {
+        calculatorItems = [];
+        updateCalculatorUI();
+    }
+
+    function modifyUnitValue(unitId, delta) {
+        if (delta === 1) {
+            addToCalculator(unitId);
+        } else if (delta === -1) {
+            removeFromCalculator(unitId);
+        }
+    }
+
+    function renderCategories() {
+        const container = document.getElementById('categoriesList');
+        let html = '';
+        rarityOrder.forEach(rarity => {
+            const activeClass = (currentCategory === rarity) ? 'active' : '';
+            html += `
+                <div class="category-item ${activeClass}" data-category="${rarity}">
+                    <span class="category-icon">🐟</span>
+                    <span>${rarity}</span>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+        
+        document.querySelectorAll('.category-item').forEach(el => {
+            el.addEventListener('click', () => {
+                const cat = el.getAttribute('data-category');
+                currentCategory = cat;
+                renderCategories();
+                applyFiltersAndRender();
+            });
+        });
+    }
+
+    function getFilteredItems() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+        const stabilityFilter = document.getElementById('stabilitySelect').value;
+        const sortType = document.getElementById('sortSelect').value;
+
+        let filtered = unitsDatabase.filter(unit => unit.category === currentCategory);
+
+        if (searchTerm) {
+            filtered = filtered.filter(unit => unit.name.toLowerCase().includes(searchTerm));
+        }
+        if (stabilityFilter !== "all") {
+            filtered = filtered.filter(unit => unit.stability === stabilityFilter);
+        }
+        if (sortType === "value-high") {
+            filtered.sort((a,b) => {
+                const valA = getMinValue(a.rangedValue);
+                const valB = getMinValue(b.rangedValue);
+                return valB - valA;
+            });
+        } else if (sortType === "value-low") {
+            filtered.sort((a,b) => {
+                const valA = getMinValue(a.rangedValue);
+                const valB = getMinValue(b.rangedValue);
+                return valA - valB;
+            });
+        }
+        return filtered;
+    }
+
+    function renderItems() {
+        const filtered = getFilteredItems();
+        const grid = document.getElementById('itemsGrid');
+        if (!filtered.length) {
+            grid.innerHTML = `<div class="no-results">✨ No units in ${currentCategory} category ✨</div>`;
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(unit => {
+            const stabilityClass = getStabilityClass(unit.stability);
+            html += `
+                <div class="item-card" data-id="${unit.id}">
+                    <div class="item-name">${unit.name}</div>
+                    <div class="value-row">
+                        <span class="value-label">Value</span>
+                        <div class="value-control">
+                            <button class="dec-btn" data-id="${unit.id}">-1</button>
+                            <span class="current-value">${unit.rangedValue}</span>
+                            <button class="inc-btn" data-id="${unit.id}">+1</button>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Ranged Value</span>
+                        <span class="detail-value">${unit.rangedValue}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Stability</span>
+                        <span class="detail-value"><span class="stability-badge ${stabilityClass}">${unit.stability}</span></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity</span>
+                        <span class="detail-value">${unit.rarity}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Last Change in Value</span>
+                        <span class="detail-value">${unit.lastChange}</span>
+                    </div>
+                </div>
+            `;
+        });
+        grid.innerHTML = html;
+
+        document.querySelectorAll('.inc-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = parseInt(btn.getAttribute('data-id'));
+                modifyUnitValue(id, 1);
+            });
+        });
+        document.querySelectorAll('.dec-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = parseInt(btn.getAttribute('data-id'));
+                modifyUnitValue(id, -1);
+            });
+        });
+    }
+
+    function applyFiltersAndRender() {
+        renderItems();
+    }
+
+    function bindFilters() {
+        document.getElementById('searchInput').addEventListener('input', () => applyFiltersAndRender());
+        document.getElementById('filterBtn').addEventListener('click', () => applyFiltersAndRender());
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('stabilitySelect').value = 'all';
+            document.getElementById('sortSelect').value = 'value-high';
+            applyFiltersAndRender();
+        });
+        document.getElementById('sortSelect').addEventListener('change', () => applyFiltersAndRender());
+        document.getElementById('clearCalculatorBtn').addEventListener('click', () => clearCalculator());
+    }
+
+    renderCategories();
+    bindFilters();
+    applyFiltersAndRender();
+    updateCalculatorUI();
+</script>
+</body>
+</html>
