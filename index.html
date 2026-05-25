@@ -401,12 +401,6 @@
             color: transparent;
         }
 
-        .total-range {
-            font-size: 0.9rem;
-            color: #8d99c6;
-            margin-left: 12px;
-        }
-
         .empty-calc {
             color: #6f7aa3;
             text-align: center;
@@ -482,13 +476,13 @@
             <span class="total-label">💰 TOTAL VALUE (Ranged):</span>
             <div>
                 <span class="total-value" id="calculatorTotal">0</span>
-                <span class="total-range" id="calculatorTotalRange"></span>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+    // ========= ВСЕ ЮНИТЫ С ОБНОВЛЕННЫМИ ЦЕНАМИ =========
     const unitsDatabase = [
         { id: 1, name: "Camerawoman", rarity: "Basic", rangedValue: "1", stability: "Underpaid For", lastChange: "+0", category: "Basic" },
         { id: 2, name: "Speakerman", rarity: "Basic", rangedValue: "0", stability: "Stable", lastChange: "+0", category: "Basic" },
@@ -507,19 +501,19 @@
         { id: 15, name: "Ninja Cameraman", rarity: "Legendary", rangedValue: "65-70", stability: "Doing Well", lastChange: "+5", category: "Legendary" },
         { id: 16, name: "Dancing Speakerwomen", rarity: "Legendary", rangedValue: "50-60", stability: "Underpaid For", lastChange: "-2", category: "Legendary" },
         { id: 17, name: "Titan Speakerman", rarity: "Legendary", rangedValue: "60-65", stability: "Stable", lastChange: "+5", category: "Legendary" },
-        { id: 18, name: "Mech Cameraman", rarity: "Legendary", rangedValue: "110-120", stability: "Doing Well", lastChange: "+5", category: "Legendary" },
-        { id: 19, name: "Laser Cameraman Car", rarity: "Legendary", rangedValue: "120-130", stability: "Overpaid For", lastChange: "+10", category: "Legendary" },
+        { id: 18, name: "Mech Cameraman", rarity: "Legendary", rangedValue: "120-130", stability: "Doing Well", lastChange: "+5", category: "Legendary" },
+        { id: 19, name: "Laser Cameraman Car", rarity: "Legendary", rangedValue: "130-140", stability: "Overpaid For", lastChange: "+10", category: "Legendary" },
         { id: 20, name: "Titan Cinemaman", rarity: "Mythic", rangedValue: "1000-1100", stability: "Stable", lastChange: "+0", category: "Mythic" },
         { id: 21, name: "Upgraded Titan Speakerman", rarity: "Mythic", rangedValue: "1500-1600", stability: "Stable", lastChange: "+50", category: "Mythic" },
         { id: 22, name: "Upgraded Titan Cameraman", rarity: "Mythic", rangedValue: "2000-2200", stability: "Doing Well", lastChange: "+50", category: "Mythic" },
         { id: 23, name: "Speaker Spider", rarity: "Exclusive", rangedValue: "50-60", stability: "Stable", lastChange: "-5", category: "Exclusive" },
-        { id: 24, name: "Camera Spider", rarity: "Exclusive", rangedValue: "70-90", stability: "Stable", lastChange: "+5", category: "Exclusive" },
-        { id: 25, name: "Camera Repair Drone", rarity: "Exclusive", rangedValue: "130-150", stability: "Stable", lastChange: "+0", category: "Exclusive" },
+        { id: 24, name: "Camera Spider", rarity: "Exclusive", rangedValue: "150", stability: "Stable", lastChange: "+5", category: "Exclusive" },
+        { id: 25, name: "Camera Repair Drone", rarity: "Exclusive", rangedValue: "300", stability: "Stable", lastChange: "+0", category: "Exclusive" },
         { id: 26, name: "Jetpack Cameraman", rarity: "Exclusive", rangedValue: "190-220", stability: "Stable", lastChange: "+5", category: "Exclusive" },
         { id: 27, name: "Titan Cameraman", rarity: "Exclusive", rangedValue: "190-200", stability: "Stable", lastChange: "+0", category: "Exclusive" },
         { id: 28, name: "Tv Woman", rarity: "Exclusive", rangedValue: "60-65", stability: "Stable", lastChange: "+0", category: "Exclusive" },
         { id: 29, name: "Scientist Cameraman", rarity: "Exclusive", rangedValue: "150-170", stability: "Doing Well", lastChange: "+5", category: "Exclusive" },
-        { id: 30, name: "Large Scientist Cameraman", rarity: "Exclusive", rangedValue: "90-100", stability: "Stable", lastChange: "+0", category: "Exclusive" },
+        { id: 30, name: "Large Scientist Cameraman", rarity: "Exclusive", rangedValue: "40", stability: "Stable", lastChange: "+0", category: "Exclusive" },
         { id: 31, name: "Tv Spider", rarity: "Exclusive", rangedValue: "20000+", stability: "Overpaid For", lastChange: "+1000", category: "Exclusive" },
         { id: 32, name: "Engineer Cameraman", rarity: "Exclusive", rangedValue: "13000+", stability: "Overpaid For", lastChange: "+500", category: "Exclusive" }
     ];
@@ -527,7 +521,6 @@
     const rarityOrder = ["Basic", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Exclusive"];
     let currentCategory = "Basic";
     
-    // Калькулятор: массив объектов { id, name, rangedValue, minVal, maxVal } - можно добавлять дубликаты
     let calculatorItems = [];
 
     function getStabilityClass(stability) {
@@ -571,16 +564,13 @@
     function updateCalculatorUI() {
         const container = document.getElementById('calculatorItemsList');
         const totalSpan = document.getElementById('calculatorTotal');
-        const totalRangeSpan = document.getElementById('calculatorTotalRange');
         
         if (calculatorItems.length === 0) {
             container.innerHTML = '<div class="empty-calc">No units added. Click +1 or -1 on any unit to add to calculator.</div>';
             totalSpan.innerText = '0';
-            totalRangeSpan.innerText = '';
             return;
         }
         
-        // Группируем по имени для отображения количества
         const grouped = {};
         for (let item of calculatorItems) {
             if (!grouped[item.name]) {
@@ -606,17 +596,14 @@
         const totals = getCalculatorTotal();
         if (totals.min === totals.max) {
             totalSpan.innerText = totals.min.toLocaleString();
-            totalRangeSpan.innerText = '';
         } else {
             totalSpan.innerText = `${totals.min.toLocaleString()} - ${totals.max.toLocaleString()}`;
-            totalRangeSpan.innerText = '';
         }
         
         document.querySelectorAll('.remove-unit-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const name = btn.getAttribute('data-name');
-                // Удаляем один экземпляр с таким именем (последний добавленный)
                 const index = calculatorItems.findLastIndex(item => item.name === name);
                 if (index !== -1) calculatorItems.splice(index, 1);
                 updateCalculatorUI();
