@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>TTD Value List - Trades & Chat</title>
+    <title>TTD Value List</title>
     <style>
         * {
             margin: 0;
@@ -21,39 +21,6 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-        }
-
-        /* TRADE NAV BUTTONS - красивые и закругленные */
-        .trade-nav {
-            background: #0c0f18;
-            padding: 12px 28px;
-            border-bottom: 1px solid #1e2335;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .trade-nav-btn {
-            background: #1a1f32;
-            border: none;
-            padding: 10px 28px;
-            border-radius: 60px;
-            color: #eef2ff;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-            letter-spacing: 0.3px;
-            backdrop-filter: blur(2px);
-        }
-        .trade-nav-btn.active {
-            background: linear-gradient(135deg, #f5b042, #ffcf7a);
-            color: #0b0e17;
-            box-shadow: 0 2px 8px rgba(245,176,66,0.3);
-        }
-        .trade-nav-btn:hover:not(.active) {
-            background: #2a2f48;
-            transform: translateY(-1px);
         }
 
         .main-row {
@@ -442,314 +409,63 @@
             width: 100%;
         }
 
-        /* TRADES PANEL - полностью повторяет стили старого интерфейса */
-        .trades-section {
-            background: #0b0e17;
-            padding: 24px 28px;
-            width: 100%;
-        }
-        .trades-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-        .trades-header h2 {
-            font-size: 1.6rem;
-            background: linear-gradient(135deg, #f5b042, #ffdc97);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-        .add-offer-btn {
-            background: linear-gradient(135deg, #f5b042, #ffcf7a);
-            border: none;
-            padding: 10px 28px;
-            border-radius: 60px;
-            font-weight: bold;
-            color: #0b0e17;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            box-shadow: 0 2px 6px rgba(245,176,66,0.3);
-        }
-        .add-offer-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(245,176,66,0.4);
-        }
-        .trades-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            max-height: 480px;
-            overflow-y: auto;
-            padding-right: 8px;
-        }
-        .trade-card {
-            background: #111522;
-            border-radius: 24px;
-            padding: 20px 24px;
-            border: 1px solid #222838;
-            transition: 0.15s;
-        }
-        .trade-card:hover {
-            border-color: #f5b042;
-        }
-        .trade-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
-        .trade-desc {
-            color: #b9c3f0;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-        .trade-meta {
-            display: flex;
-            gap: 24px;
-            font-size: 0.7rem;
-            color: #8d99c6;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-        .trade-buttons {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-        .chat-btn, .delete-trade-btn {
-            border: none;
-            padding: 8px 20px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 500;
-            transition: all 0.15s;
-        }
-        .chat-btn {
-            background: #3a4a6e;
-            color: white;
-        }
-        .chat-btn:hover {
-            background: #4a6a9e;
-            transform: translateY(-1px);
-        }
-        .delete-trade-btn {
-            background: #6b2e4a;
-            color: #ffbcda;
-        }
-        .delete-trade-btn:hover {
-            background: #8a3b60;
-            transform: translateY(-1px);
-        }
-        .chat-window {
-            margin-top: 18px;
-            background: #0a0d16;
-            border-radius: 20px;
-            padding: 14px;
-            border: 1px solid #2e354f;
-        }
-        .chat-messages {
-            max-height: 180px;
-            overflow-y: auto;
-            padding: 6px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 14px;
-        }
-        .chat-msg {
-            background: #1a1f32;
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            word-break: break-word;
-            color: #eef2ff;
-        }
-        .chat-msg strong {
-            color: #f5b042;
-        }
-        .chat-input-area {
-            display: flex;
-            gap: 12px;
-        }
-        .chat-input-area input {
-            flex: 1;
-            background: #1e2337;
-            border: 1px solid #2e354f;
-            border-radius: 40px;
-            padding: 10px 16px;
-            color: white;
-            font-size: 0.8rem;
-            outline: none;
-        }
-        .send-msg {
-            background: #6c7bdb;
-            border: none;
-            border-radius: 40px;
-            padding: 8px 22px;
-            cursor: pointer;
-            color: white;
-            font-weight: 500;
-            transition: 0.15s;
-        }
-        .send-msg:hover {
-            background: #8a9aff;
-            transform: scale(0.97);
-        }
-        .empty-trades {
-            text-align: center;
-            padding: 60px;
-            color: #7a85b0;
-            background: #111522;
-            border-radius: 28px;
-            font-size: 0.9rem;
-        }
-        /* MODAL окно - красивое */
-        .modal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background: #111522;
-            border-radius: 32px;
-            padding: 28px;
-            width: 90%;
-            max-width: 500px;
-            border: 1px solid #f5b042;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
-        .modal-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 16px;
-        }
-        .modal-content input, .modal-content textarea {
-            width: 100%;
-            background: #1e2337;
-            border: 1px solid #2e354f;
-            padding: 12px 16px;
-            margin: 12px 0;
-            border-radius: 30px;
-            color: white;
-            font-size: 0.9rem;
-            outline: none;
-        }
-        .modal-content textarea {
-            border-radius: 20px;
-            resize: vertical;
-        }
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            margin-top: 16px;
-        }
-        .modal-buttons button {
-            padding: 10px 24px;
-            border-radius: 40px;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        #modalCancelBtn {
-            background: #2a2f48;
-            color: white;
-        }
-        #modalSubmitBtn {
-            background: #f5b042;
-            color: #0b0e17;
-        }
-
         @media (max-width: 800px) {
             .main-row { flex-direction: column; }
             .categories-sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid #1e2335; }
-            .trades-section { padding: 20px; }
         }
     </style>
 </head>
 <body>
 <div class="app-layout">
-    <div class="trade-nav">
-        <button class="trade-nav-btn active" data-mode="values">📊 Value List</button>
-        <button class="trade-nav-btn" data-mode="trades">🔄 Trades & Chat</button>
-    </div>
-    
-    <!-- Блок Value List (полностью старый интерфейс) -->
-    <div id="valueListBlock">
-        <div class="main-row">
-            <div class="categories-sidebar">
-                <div class="categories-header">📂 CATEGORIES:</div>
-                <div id="categoriesList"></div>
+    <div class="main-row">
+        <div class="categories-sidebar">
+            <div class="categories-header">📂 CATEGORIES:</div>
+            <div id="categoriesList"></div>
+        </div>
+
+        <div class="main-content">
+            <div class="partner-bar">
+                <div class="partner">
+                    <span>partner:</span>
+                    <span class="partner-creator">@Kola2_l</span>
+                    <span class="partner-creator">@Xmyrni_Alkogolik</span>
+                    <span class="partner-creator">@Fotty46</span>
+                    <span class="partner-creator">@vvblaze74</span>
+                </div>
+                <div class="take-me-there">Take me there →</div>
             </div>
-            <div class="main-content">
-                <div class="partner-bar">
-                    <div class="partner">
-                        <span>partner:</span>
-                        <span class="partner-creator">@Kola2_l</span>
-                        <span class="partner-creator">Xmyrni_Alkogolik</span>
-                    </div>
-                    <div class="take-me-there">Take me there →</div>
+
+            <div class="control-panel">
+                <div class="search-area">
+                    <input type="text" id="searchInput" placeholder="Type item name here... Search In-Page">
                 </div>
-                <div class="control-panel">
-                    <div class="search-area">
-                        <input type="text" id="searchInput" placeholder="Type item name here... Search In-Page">
-                    </div>
-                    <div class="filter-group">
-                        <select id="stabilitySelect">
-                            <option value="all">Select Stability ▼</option>
-                            <option value="Doing Well">Doing Well</option>
-                            <option value="Stable">Stable</option>
-                            <option value="Underpaid For">Underpaid For</option>
-                            <option value="Overpaid For">Overpaid For</option>
-                        </select>
-                        <button id="filterBtn">Filter Items</button>
-                        <button id="clearBtn">Clear</button>
-                    </div>
-                    <div class="sort-by">
-                        <span>Sort by:</span>
-                        <select id="sortSelect">
-                            <option value="value-high">Value (High→Low)</option>
-                            <option value="value-low">Value (Low→High)</option>
-                        </select>
-                    </div>
+                <div class="filter-group">
+                    <select id="stabilitySelect">
+                        <option value="all">Select Stability ▼</option>
+                        <option value="Doing Well">Doing Well</option>
+                        <option value="Stable">Stable</option>
+                        <option value="Underpaid For">Underpaid For</option>
+                        <option value="Overpaid For">Overpaid For</option>
+                    </select>
+                    <button id="filterBtn">Filter Items</button>
+                    <button id="clearBtn">Clear</button>
                 </div>
-                <div class="tier-section">
-                    <div class="tier-title">✦ TTD Value List</div>
-                    <div id="itemsGrid" class="items-grid"></div>
+                <div class="sort-by">
+                    <span>Sort by:</span>
+                    <select id="sortSelect">
+                        <option value="value-high">Value (High→Low)</option>
+                        <option value="value-low">Value (Low→High)</option>
+                    </select>
                 </div>
+            </div>
+
+            <div class="tier-section">
+                <div class="tier-title">✦ TTD Value List</div>
+                <div id="itemsGrid" class="items-grid"></div>
             </div>
         </div>
     </div>
 
-    <!-- Блок Trades (отдельная кнопка, скрыт по умолчанию) -->
-    <div id="tradesBlock" style="display: none;">
-        <div class="trades-section">
-            <div class="trades-header">
-                <h2>💬 Trade Offers & Chat</h2>
-                <button class="add-offer-btn" id="openOfferModalBtn">+ Add Your Offer</button>
-            </div>
-            <div id="tradesListContainer" class="trades-grid">
-                <!-- Динамические предложения -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Калькулятор (общий для обоих режимов) -->
     <div class="calculator-section">
         <div class="calculator-header">
             <div class="calculator-title">🧮 VALUE CALCULATOR</div>
@@ -768,7 +484,7 @@
 </div>
 
 <script>
-    // ========= DATABASE =========
+    // ========= ВСЕ ЮНИТЫ С ОБНОВЛЕННЫМИ ЦЕНАМИ =========
     const unitsDatabase = [
         { id: 1, name: "Camerawoman", rarity: "Basic", rangedValue: "1", stability: "Underpaid For", lastChange: "+0", category: "Basic" },
         { id: 2, name: "Speakerman", rarity: "Basic", rangedValue: "0", stability: "Stable", lastChange: "+0", category: "Basic" },
@@ -803,67 +519,92 @@
         { id: 31, name: "Tv Spider", rarity: "Exclusive", rangedValue: "20000+", stability: "Overpaid For", lastChange: "+1000", category: "Exclusive" },
         { id: 32, name: "Engineer Cameraman", rarity: "Exclusive", rangedValue: "13000+", stability: "Overpaid For", lastChange: "+500", category: "Exclusive" }
     ];
+
     const rarityOrder = ["Basic", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Exclusive"];
     let currentCategory = "Basic";
+    
     let calculatorItems = [];
 
-    // ========= TRADES SYSTEM =========
-    let trades = [];
-    let nextTradeId = 1;
-
-    // Load saved trades
-    const savedTrades = localStorage.getItem("ttd_trades_chat");
-    if (savedTrades) {
-        try {
-            trades = JSON.parse(savedTrades);
-            nextTradeId = trades.length ? Math.max(...trades.map(t=>t.id)) + 1 : 1;
-        } catch(e) {}
-    } else {
-        trades = [
-            { id: 1, title: "🔥 LF Titan Cameraman", description: "I'm looking for Upgraded Titan Cameraman", offerDetails: "Offering Upgraded Titan Speakerman + 200 value adds", author: "@Kola2_l", createdAt: new Date().toLocaleString(), chatMessages: [{ sender: "@Kola2_l", text: "Anyone willing to trade?", time: "14:32" }] },
-            { id: 2, title: "Selling TV Spider", description: "Rare exclusive unit, best offer", offerDetails: "Price: 22k value or good mythics", author: "@Xmyrni", createdAt: new Date().toLocaleString(), chatMessages: [] }
-        ];
-        saveTrades();
+    function getStabilityClass(stability) {
+        if (stability === "Doing Well") return "doing-well";
+        if (stability === "Stable") return "stable";
+        if (stability === "Underpaid For") return "underpaid";
+        if (stability === "Overpaid For") return "overpaid";
+        return "stable";
     }
-    function saveTrades() { localStorage.setItem("ttd_trades_chat", JSON.stringify(trades)); }
 
-    // Helper functions
     function getMinValue(rangedValue) {
-        if (rangedValue.includes('-')) return parseInt(rangedValue.split('-')[0]);
-        else if (rangedValue.includes('+')) return parseInt(rangedValue.replace('+', ''));
-        else return parseInt(rangedValue);
-    }
-    function getMaxValue(rangedValue) {
-        if (rangedValue.includes('-')) return parseInt(rangedValue.split('-')[1]);
-        else if (rangedValue.includes('+')) return parseInt(rangedValue.replace('+', '')) + 500;
-        else return parseInt(rangedValue);
+        if (rangedValue.includes('-')) {
+            return parseInt(rangedValue.split('-')[0]);
+        } else if (rangedValue.includes('+')) {
+            return parseInt(rangedValue.replace('+', ''));
+        } else {
+            return parseInt(rangedValue);
+        }
     }
 
-    // Calculator logic
+    function getMaxValue(rangedValue) {
+        if (rangedValue.includes('-')) {
+            return parseInt(rangedValue.split('-')[1]);
+        } else if (rangedValue.includes('+')) {
+            return parseInt(rangedValue.replace('+', '')) + 500;
+        } else {
+            return parseInt(rangedValue);
+        }
+    }
+
+    function getCalculatorTotal() {
+        let totalMin = 0;
+        let totalMax = 0;
+        for (let item of calculatorItems) {
+            totalMin += item.minVal;
+            totalMax += item.maxVal;
+        }
+        return { min: totalMin, max: totalMax };
+    }
+
     function updateCalculatorUI() {
         const container = document.getElementById('calculatorItemsList');
         const totalSpan = document.getElementById('calculatorTotal');
+        
         if (calculatorItems.length === 0) {
             container.innerHTML = '<div class="empty-calc">No units added. Click +1 or -1 on any unit to add to calculator.</div>';
             totalSpan.innerText = '0';
             return;
         }
+        
         const grouped = {};
         for (let item of calculatorItems) {
-            if (!grouped[item.name]) grouped[item.name] = { count: 0, rangedValue: item.rangedValue, id: item.id };
+            if (!grouped[item.name]) {
+                grouped[item.name] = { count: 0, rangedValue: item.rangedValue, id: item.id };
+            }
             grouped[item.name].count++;
         }
+        
         let html = '';
         for (let name in grouped) {
             const info = grouped[name];
-            html += `<div class="calc-unit" data-id="${info.id}"><span class="calc-unit-name">${name}</span><span class="calc-unit-value">${info.rangedValue}</span><span class="calc-unit-count">x${info.count}</span><button class="remove-unit-btn" data-name="${name}">✕</button></div>`;
+            html += `
+                <div class="calc-unit" data-id="${info.id}">
+                    <span class="calc-unit-name">${name}</span>
+                    <span class="calc-unit-value">${info.rangedValue}</span>
+                    <span class="calc-unit-count">x${info.count}</span>
+                    <button class="remove-unit-btn" data-name="${name}">✕</button>
+                </div>
+            `;
         }
         container.innerHTML = html;
-        let totalMin = 0, totalMax = 0;
-        calculatorItems.forEach(i => { totalMin += i.minVal; totalMax += i.maxVal; });
-        totalSpan.innerText = totalMin === totalMax ? totalMin.toLocaleString() : `${totalMin.toLocaleString()} - ${totalMax.toLocaleString()}`;
+        
+        const totals = getCalculatorTotal();
+        if (totals.min === totals.max) {
+            totalSpan.innerText = totals.min.toLocaleString();
+        } else {
+            totalSpan.innerText = `${totals.min.toLocaleString()} - ${totals.max.toLocaleString()}`;
+        }
+        
         document.querySelectorAll('.remove-unit-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const name = btn.getAttribute('data-name');
                 const index = calculatorItems.findLastIndex(item => item.name === name);
                 if (index !== -1) calculatorItems.splice(index, 1);
@@ -871,152 +612,173 @@
             });
         });
     }
+
     function addToCalculator(unitId) {
         const unit = unitsDatabase.find(u => u.id === unitId);
         if (unit) {
-            calculatorItems.push({ id: unit.id, name: unit.name, rangedValue: unit.rangedValue, minVal: getMinValue(unit.rangedValue), maxVal: getMaxValue(unit.rangedValue) });
+            calculatorItems.push({
+                id: unit.id,
+                name: unit.name,
+                rangedValue: unit.rangedValue,
+                minVal: getMinValue(unit.rangedValue),
+                maxVal: getMaxValue(unit.rangedValue)
+            });
             updateCalculatorUI();
         }
     }
+
     function removeFromCalculator(unitId) {
         const index = calculatorItems.findLastIndex(item => item.id === unitId);
         if (index !== -1) calculatorItems.splice(index, 1);
         updateCalculatorUI();
     }
 
-    // Value list rendering
+    function clearCalculator() {
+        calculatorItems = [];
+        updateCalculatorUI();
+    }
+
+    function modifyUnitValue(unitId, delta) {
+        if (delta === 1) {
+            addToCalculator(unitId);
+        } else if (delta === -1) {
+            removeFromCalculator(unitId);
+        }
+    }
+
     function renderCategories() {
         const container = document.getElementById('categoriesList');
         let html = '';
         rarityOrder.forEach(rarity => {
-            html += `<div class="category-item ${currentCategory === rarity ? 'active' : ''}" data-category="${rarity}"><span class="category-icon">🐟</span><span>${rarity}</span></div>`;
+            const activeClass = (currentCategory === rarity) ? 'active' : '';
+            html += `
+                <div class="category-item ${activeClass}" data-category="${rarity}">
+                    <span class="category-icon">🐟</span>
+                    <span>${rarity}</span>
+                </div>
+            `;
         });
         container.innerHTML = html;
+        
         document.querySelectorAll('.category-item').forEach(el => {
-            el.addEventListener('click', () => { currentCategory = el.getAttribute('data-category'); renderCategories(); applyFiltersAndRender(); });
+            el.addEventListener('click', () => {
+                const cat = el.getAttribute('data-category');
+                currentCategory = cat;
+                renderCategories();
+                applyFiltersAndRender();
+            });
         });
     }
+
     function getFilteredItems() {
-        let filtered = unitsDatabase.filter(unit => unit.category === currentCategory);
         const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-        if (searchTerm) filtered = filtered.filter(unit => unit.name.toLowerCase().includes(searchTerm));
         const stabilityFilter = document.getElementById('stabilitySelect').value;
-        if (stabilityFilter !== "all") filtered = filtered.filter(unit => unit.stability === stabilityFilter);
         const sortType = document.getElementById('sortSelect').value;
-        if (sortType === "value-high") filtered.sort((a,b) => getMinValue(b.rangedValue) - getMinValue(a.rangedValue));
-        else filtered.sort((a,b) => getMinValue(a.rangedValue) - getMinValue(b.rangedValue));
+
+        let filtered = unitsDatabase.filter(unit => unit.category === currentCategory);
+
+        if (searchTerm) {
+            filtered = filtered.filter(unit => unit.name.toLowerCase().includes(searchTerm));
+        }
+        if (stabilityFilter !== "all") {
+            filtered = filtered.filter(unit => unit.stability === stabilityFilter);
+        }
+        if (sortType === "value-high") {
+            filtered.sort((a,b) => {
+                const valA = getMinValue(a.rangedValue);
+                const valB = getMinValue(b.rangedValue);
+                return valB - valA;
+            });
+        } else if (sortType === "value-low") {
+            filtered.sort((a,b) => {
+                const valA = getMinValue(a.rangedValue);
+                const valB = getMinValue(b.rangedValue);
+                return valA - valB;
+            });
+        }
         return filtered;
     }
+
     function renderItems() {
         const filtered = getFilteredItems();
         const grid = document.getElementById('itemsGrid');
-        if (!filtered.length) { grid.innerHTML = `<div class="no-results">✨ No units in ${currentCategory} category ✨</div>`; return; }
+        if (!filtered.length) {
+            grid.innerHTML = `<div class="no-results">✨ No units in ${currentCategory} category ✨</div>`;
+            return;
+        }
+
         let html = '';
         filtered.forEach(unit => {
-            let stabilityClass = "";
-            if (unit.stability === "Doing Well") stabilityClass = "doing-well";
-            else if (unit.stability === "Stable") stabilityClass = "stable";
-            else if (unit.stability === "Underpaid For") stabilityClass = "underpaid";
-            else stabilityClass = "overpaid";
-            html += `<div class="item-card"><div class="item-name">${unit.name}</div><div class="value-row"><span class="value-label">Value</span><div class="value-control"><button class="dec-btn" data-id="${unit.id}">-1</button><span class="current-value">${unit.rangedValue}</span><button class="inc-btn" data-id="${unit.id}">+1</button></div></div><div class="detail-row"><span class="detail-label">Stability</span><span class="detail-value"><span class="stability-badge ${stabilityClass}">${unit.stability}</span></span></div><div class="detail-row"><span class="detail-label">Rarity</span><span class="detail-value">${unit.rarity}</span></div><div class="detail-row"><span class="detail-label">Last Change</span><span class="detail-value">${unit.lastChange}</span></div></div>`;
+            const stabilityClass = getStabilityClass(unit.stability);
+            html += `
+                <div class="item-card" data-id="${unit.id}">
+                    <div class="item-name">${unit.name}</div>
+                    <div class="value-row">
+                        <span class="value-label">Value</span>
+                        <div class="value-control">
+                            <button class="dec-btn" data-id="${unit.id}">-1</button>
+                            <span class="current-value">${unit.rangedValue}</span>
+                            <button class="inc-btn" data-id="${unit.id}">+1</button>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Ranged Value</span>
+                        <span class="detail-value">${unit.rangedValue}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Stability</span>
+                        <span class="detail-value"><span class="stability-badge ${stabilityClass}">${unit.stability}</span></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rarity</span>
+                        <span class="detail-value">${unit.rarity}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Last Change in Value</span>
+                        <span class="detail-value">${unit.lastChange}</span>
+                    </div>
+                </div>
+            `;
         });
         grid.innerHTML = html;
-        document.querySelectorAll('.inc-btn').forEach(btn => { btn.addEventListener('click', () => addToCalculator(parseInt(btn.dataset.id))); });
-        document.querySelectorAll('.dec-btn').forEach(btn => { btn.addEventListener('click', () => removeFromCalculator(parseInt(btn.dataset.id))); });
+
+        document.querySelectorAll('.inc-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = parseInt(btn.getAttribute('data-id'));
+                modifyUnitValue(id, 1);
+            });
+        });
+        document.querySelectorAll('.dec-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = parseInt(btn.getAttribute('data-id'));
+                modifyUnitValue(id, -1);
+            });
+        });
     }
-    function applyFiltersAndRender() { renderItems(); }
+
+    function applyFiltersAndRender() {
+        renderItems();
+    }
+
     function bindFilters() {
         document.getElementById('searchInput').addEventListener('input', () => applyFiltersAndRender());
         document.getElementById('filterBtn').addEventListener('click', () => applyFiltersAndRender());
-        document.getElementById('clearBtn').addEventListener('click', () => { document.getElementById('searchInput').value = ''; document.getElementById('stabilitySelect').value = 'all'; document.getElementById('sortSelect').value = 'value-high'; applyFiltersAndRender(); });
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('stabilitySelect').value = 'all';
+            document.getElementById('sortSelect').value = 'value-high';
+            applyFiltersAndRender();
+        });
         document.getElementById('sortSelect').addEventListener('change', () => applyFiltersAndRender());
-        document.getElementById('clearCalculatorBtn').addEventListener('click', () => { calculatorItems = []; updateCalculatorUI(); });
+        document.getElementById('clearCalculatorBtn').addEventListener('click', () => clearCalculator());
     }
 
-    // Trades rendering with chat
-    function renderTrades() {
-        const container = document.getElementById('tradesListContainer');
-        if (!container) return;
-        if (trades.length === 0) { container.innerHTML = '<div class="empty-trades">✨ No trade offers yet. Be the first to add one! ✨</div>'; return; }
-        let html = '';
-        trades.forEach(trade => {
-            const messagesHtml = trade.chatMessages.map(m => `<div class="chat-msg"><strong>${escapeHtml(m.sender)}:</strong> ${escapeHtml(m.text)} <span style="font-size:0.6rem; opacity:0.6;">${m.time}</span></div>`).join('');
-            html += `<div class="trade-card" data-trade-id="${trade.id}">
-                        <div class="trade-title"><span>📢 ${escapeHtml(trade.title)}</span> <span style="font-size:0.7rem;">by ${escapeHtml(trade.author)}</span></div>
-                        <div class="trade-desc">${escapeHtml(trade.description)}</div>
-                        <div class="trade-meta"><span>💎 ${escapeHtml(trade.offerDetails)}</span><span>📅 ${trade.createdAt}</span></div>
-                        <div class="trade-buttons">
-                            <button class="chat-btn" data-id="${trade.id}">💬 Chat (${trade.chatMessages.length})</button>
-                            <button class="delete-trade-btn" data-id="${trade.id}">🗑 Delete</button>
-                        </div>
-                        <div id="chat_${trade.id}" class="chat-window" style="display: none;">
-                            <div class="chat-messages" id="msgs_${trade.id}">${messagesHtml || '<div style="color:#7a85b0;">No messages yet. Start the conversation!</div>'}</div>
-                            <div class="chat-input-area">
-                                <input type="text" id="chatInput_${trade.id}" placeholder="Write a message...">
-                                <button class="send-msg" data-id="${trade.id}">Send</button>
-                            </div>
-                        </div>
-                    </div>`;
-        });
-        container.innerHTML = html;
-        trades.forEach(trade => {
-            const chatBtn = document.querySelector(`.chat-btn[data-id="${trade.id}"]`);
-            if (chatBtn) chatBtn.addEventListener('click', () => { const win = document.getElementById(`chat_${trade.id}`); if (win) win.style.display = win.style.display === 'none' ? 'block' : 'none'; });
-            const sendBtn = document.querySelector(`.send-msg[data-id="${trade.id}"]`);
-            if (sendBtn) sendBtn.addEventListener('click', () => { const input = document.getElementById(`chatInput_${trade.id}`); const msg = input.value.trim(); if (msg) { trade.chatMessages.push({ sender: "You", text: msg, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) }); saveTrades(); renderTrades(); } });
-            const delBtn = document.querySelector(`.delete-trade-btn[data-id="${trade.id}"]`);
-            if (delBtn) delBtn.addEventListener('click', () => { if (confirm("Delete this trade offer?")) { trades = trades.filter(t => t.id !== trade.id); saveTrades(); renderTrades(); } });
-        });
-    }
-    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
-    function showAddOfferModal() {
-        if (document.querySelector('.modal')) return;
-        const modalDiv = document.createElement('div');
-        modalDiv.className = 'modal';
-        modalDiv.innerHTML = `<div class="modal-content"><h3>➕ Create Trade Offer</h3><input type="text" id="modalTitle" placeholder="Offer title (e.g. LF Titan Speakerman)"><textarea id="modalDesc" rows="2" placeholder="Describe your offer..."></textarea><input type="text" id="modalDetails" placeholder="Offer details / what you give"><input type="text" id="modalAuthor" placeholder="Your nickname" value="Trader"><div class="modal-buttons"><button id="modalCancelBtn">Cancel</button><button id="modalSubmitBtn">Publish</button></div></div>`;
-        document.body.appendChild(modalDiv);
-        document.getElementById('modalCancelBtn').onclick = () => modalDiv.remove();
-        document.getElementById('modalSubmitBtn').onclick = () => {
-            const title = document.getElementById('modalTitle').value.trim();
-            const desc = document.getElementById('modalDesc').value.trim();
-            const details = document.getElementById('modalDetails').value.trim();
-            const author = document.getElementById('modalAuthor').value.trim() || "Anonymous";
-            if (!title || !desc) { alert("Please fill title and description"); return; }
-            trades.unshift({ id: nextTradeId++, title, description: desc, offerDetails: details || "No specific info", author, createdAt: new Date().toLocaleString(), chatMessages: [] });
-            saveTrades();
-            modalDiv.remove();
-            renderTrades();
-        };
-    }
-
-    // Switch between modes
-    function switchMode(mode) {
-        const valueBlock = document.getElementById('valueListBlock');
-        const tradesBlock = document.getElementById('tradesBlock');
-        const btns = document.querySelectorAll('.trade-nav-btn');
-        btns.forEach(btn => btn.classList.remove('active'));
-        if (mode === 'values') {
-            valueBlock.style.display = 'block';
-            tradesBlock.style.display = 'none';
-            document.querySelector('.trade-nav-btn[data-mode="values"]').classList.add('active');
-        } else {
-            valueBlock.style.display = 'none';
-            tradesBlock.style.display = 'block';
-            document.querySelector('.trade-nav-btn[data-mode="trades"]').classList.add('active');
-            renderTrades();
-        }
-    }
-
-    // Initialization
     renderCategories();
     bindFilters();
     applyFiltersAndRender();
     updateCalculatorUI();
-    document.querySelectorAll('.trade-nav-btn').forEach(btn => {
-        btn.addEventListener('click', () => switchMode(btn.getAttribute('data-mode')));
-    });
-    document.getElementById('openOfferModalBtn')?.addEventListener('click', showAddOfferModal);
-    switchMode('values');
 </script>
 </body>
 </html>
