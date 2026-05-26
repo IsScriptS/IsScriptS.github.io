@@ -288,7 +288,7 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 12px;
-            width: 100%;
+            width: 70%;
             transition: 0.2s;
         }
 
@@ -589,8 +589,8 @@
                         <span class="prize-name" id="prizeName">🎲 Случайная легендарка...</span>
                         <span id="timerDisplay" class="timer">--:--:--</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
-                        <button id="registerBtn" class="register-btn" style="width: 70%;">📝 ЗАРЕГИСТРИРОВАТЬСЯ</button>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; gap: 12px;">
+                        <button id="registerBtn" class="register-btn">📝 ЗАРЕГИСТРИРОВАТЬСЯ</button>
                         <div class="participants-count">👥 Участников: <span id="participantsCount">0</span></div>
                     </div>
                     <div id="joinStatus" class="join-status" style="display: none;"></div>
@@ -644,6 +644,92 @@
 </div>
 
 <script>
+    // ========== ОБЛАЧНОЕ ХРАНИЛИЩЕ (MockAPI) ==========
+    // Используем бесплатный сервис для синхронизации участников между всеми пользователями
+    const API_URL = 'https://66f9f118afc569e13a993c80.mockapi.io/api/giveaway/participants';
+    
+    let participantsList = [];
+    let currentUserRegistered = false;
+    let currentUserId = null;
+    
+    // Получаем или создаём ID пользователя
+    function getUserId() {
+        let id = localStorage.getItem('ttd_user_id');
+        if (!id) {
+            id = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('ttd_user_id', id);
+        }
+        return id;
+    }
+    
+    // Загрузка списка участников с сервера
+    async function loadParticipantsFromServer() {
+        try {
+            const response = await fetch(API_URL);
+            if (response.ok) {
+                const data = await response.json();
+                participantsList = data;
+                updateParticipantsCountDisplay();
+                
+                // Проверяем, зарегистрирован ли текущий пользователь
+                currentUserId = getUserId();
+                currentUserRegistered = participantsList.some(p => p.userId === currentUserId);
+                updateRegisterButton();
+                return participantsList;
+            }
+        } catch (error) {
+            console.log('Ошибка загрузки участников:', error);
+        }
+        return [];
+    }
+    
+    // Добавление участника на сервер
+    async function addParticipantToServer(userId, userName) {
+        try {
+            // Проверяем, не зарегистрирован ли уже
+            const existing = participantsList.some(p => p.userId === userId);
+            if (existing) return false;
+            
+            const newParticipant = {
+                userId: userId,
+                userName: userName || 'Аноним',
+                registeredAt: new Date().toISOString()
+            };
+            
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newParticipant)
+            });
+            
+            if (response.ok) {
+                await loadParticipantsFromServer(); // Обновляем список
+                return true;
+            }
+        } catch (error) {
+            console.log('Ошибка регистрации:', error);
+        }
+        return false;
+    }
+    
+    function updateParticipantsCountDisplay() {
+        const countSpan = document.getElementById('participantsCount');
+        if (countSpan) {
+            countSpan.textContent = participantsList.length;
+        }
+    }
+    
+    function updateRegisterButton() {
+        const registerBtn = document.getElementById('registerBtn');
+        if (currentUserRegistered) {
+            registerBtn.textContent = '✅ ВЫ ЗАРЕГИСТРИРОВАНЫ';
+            registerBtn.classList.add('registered');
+        } else {
+            registerBtn.textContent = '📝 ЗАРЕГИСТРИРОВАТЬСЯ';
+            registerBtn.classList.remove('registered');
+        }
+    }
+
     // ЮНИТЫ
     const unitsDatabase = [
         { id: 1, name: "Camerawoman", rarity: "Basic", baseValue: 1, stability: "Underpaid For", lastChange: "+0", category: "Basic" },
@@ -683,53 +769,6 @@
     const legendaryItems = unitsDatabase.filter(u => u.rarity === "Legendary");
     function getRandomLegendary() { return legendaryItems[Math.floor(Math.random() * legendaryItems.length)]; }
 
-    // Хранилище зарегистрированных участников (localStorage)
-    let participants = [];
-    
-    function loadParticipants() {
-        const saved = localStorage.getItem('giveaway_participants');
-        if (saved) {
-            participants = JSON.parse(saved);
-        }
-        updateParticipantsCount();
-    }
-    
-    function saveParticipants() {
-        localStorage.setItem('giveaway_participants', JSON.stringify(participants));
-        updateParticipantsCount();
-    }
-    
-    function updateParticipantsCount() {
-        const countSpan = document.getElementById('participantsCount');
-        if (countSpan) {
-            countSpan.textContent = participants.length;
-        }
-    }
-    
-    function addParticipant(participantId) {
-        if (!participants.includes(participantId)) {
-            participants.push(participantId);
-            saveParticipants();
-            return true;
-        }
-        return false;
-    }
-    
-    function isUserRegistered() {
-        const userId = getUserId();
-        return participants.includes(userId);
-    }
-    
-    function getUserId() {
-        let id = localStorage.getItem('user_id');
-        if (!id) {
-            id = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('user_id', id);
-        }
-        return id;
-    }
-
-    // Глобальные переменные
     let hasNotified5min = false;
     let currentPrize = getRandomLegendary();
     let winnerDeclared = false;
@@ -761,9 +800,7 @@
         const secs = seconds % 60;
         timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         
-        // За 5 минут до 18:00 уведомление
-        const isRegistered = isUserRegistered();
-        if (isRegistered && seconds <= 300 && seconds > 0 && !hasNotified5min) {
+        if (currentUserRegistered && seconds <= 300 && seconds > 0 && !hasNotified5min) {
             hasNotified5min = true;
             const statusDiv = document.getElementById('joinStatus');
             statusDiv.style.display = 'block';
@@ -779,10 +816,10 @@
         }
     }
 
-    function register() {
+    async function register() {
         const userId = getUserId();
         
-        if (isUserRegistered()) {
+        if (currentUserRegistered) {
             const statusDiv = document.getElementById('joinStatus');
             statusDiv.style.display = 'block';
             statusDiv.className = 'join-status warning';
@@ -794,30 +831,24 @@
             return;
         }
         
-        addParticipant(userId);
-        const registerBtn = document.getElementById('registerBtn');
-        registerBtn.textContent = '✅ ВЫ ЗАРЕГИСТРИРОВАНЫ';
-        registerBtn.classList.add('registered');
-        
-        const statusDiv = document.getElementById('joinStatus');
-        statusDiv.style.display = 'block';
-        statusDiv.className = 'join-status success';
-        statusDiv.innerHTML = `✅ Вы успешно зарегистрированы! (Всего участников: ${participants.length}) За 5 минут до 18:00 МСК придёт уведомление. Заходите в чат и будьте первым! 🍀`;
-        setTimeout(() => {
-            statusDiv.style.opacity = '0';
-            setTimeout(() => { statusDiv.style.display = 'none'; statusDiv.style.opacity = '1'; }, 3000);
-        }, 4000);
-    }
-
-    // Обновление статуса кнопки регистрации при загрузке
-    function updateRegisterButton() {
-        const registerBtn = document.getElementById('registerBtn');
-        if (isUserRegistered()) {
-            registerBtn.textContent = '✅ ВЫ ЗАРЕГИСТРИРОВАНЫ';
-            registerBtn.classList.add('registered');
+        const success = await addParticipantToServer(userId, 'Участник');
+        if (success) {
+            currentUserRegistered = true;
+            updateRegisterButton();
+            
+            const statusDiv = document.getElementById('joinStatus');
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'join-status success';
+            statusDiv.innerHTML = `✅ Вы успешно зарегистрированы! (Всего участников: ${participantsList.length}) За 5 минут до 18:00 МСК придёт уведомление. Заходите в чат и будьте первым! 🍀`;
+            setTimeout(() => {
+                statusDiv.style.opacity = '0';
+                setTimeout(() => { statusDiv.style.display = 'none'; statusDiv.style.opacity = '1'; }, 3000);
+            }, 4000);
         } else {
-            registerBtn.textContent = '📝 ЗАРЕГИСТРИРОВАТЬСЯ';
-            registerBtn.classList.remove('registered');
+            const statusDiv = document.getElementById('joinStatus');
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'join-status error';
+            statusDiv.innerHTML = '❌ Ошибка регистрации. Попробуйте позже!';
         }
     }
 
@@ -964,8 +995,10 @@
         document.getElementById('clearCalculatorBtn').addEventListener('click', () => clearCalculator());
     }
 
-    function init() {
-        loadParticipants();
+    async function init() {
+        // Загружаем участников с сервера
+        await loadParticipantsFromServer();
+        
         renderCategories();
         bindFilters();
         applyFiltersAndRender();
@@ -978,6 +1011,9 @@
         updatePrizeDisplay();
         setInterval(updatePrizeDisplay, 30000);
         setInterval(updateTimer, 1000);
+        setInterval(async () => {
+            await loadParticipantsFromServer();
+        }, 3000); // Каждые 3 секунды обновляем список участников
         updateTimer();
         
         giveawayBtn.addEventListener('click', () => {
@@ -994,13 +1030,6 @@
         });
         
         document.getElementById('registerBtn').addEventListener('click', register);
-        updateRegisterButton();
-        
-        // Обновляем счётчик каждую секунду (на случай, если кто-то зарегистрировался в другой вкладке)
-        setInterval(() => {
-            loadParticipants();
-            updateRegisterButton();
-        }, 1000);
     }
     
     init();
