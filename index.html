@@ -255,6 +255,17 @@
             color: #ffdc97;
         }
 
+        .participants-count {
+            background: #2c3550;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: #ffdc97;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .join-status {
             margin-top: 12px;
             padding: 10px;
@@ -578,7 +589,10 @@
                         <span class="prize-name" id="prizeName">🎲 Случайная легендарка...</span>
                         <span id="timerDisplay" class="timer">--:--:--</span>
                     </div>
-                    <button id="registerBtn" class="register-btn">📝 ЗАРЕГИСТРИРОВАТЬСЯ НА УВЕДОМЛЕНИЕ</button>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+                        <button id="registerBtn" class="register-btn" style="width: 70%;">📝 ЗАРЕГИСТРИРОВАТЬСЯ</button>
+                        <div class="participants-count">👥 Участников: <span id="participantsCount">0</span></div>
+                    </div>
                     <div id="joinStatus" class="join-status" style="display: none;"></div>
                 </div>
             </div>
@@ -669,14 +683,62 @@
     const legendaryItems = unitsDatabase.filter(u => u.rarity === "Legendary");
     function getRandomLegendary() { return legendaryItems[Math.floor(Math.random() * legendaryItems.length)]; }
 
+    // Хранилище зарегистрированных участников (localStorage)
+    let participants = [];
+    
+    function loadParticipants() {
+        const saved = localStorage.getItem('giveaway_participants');
+        if (saved) {
+            participants = JSON.parse(saved);
+        }
+        updateParticipantsCount();
+    }
+    
+    function saveParticipants() {
+        localStorage.setItem('giveaway_participants', JSON.stringify(participants));
+        updateParticipantsCount();
+    }
+    
+    function updateParticipantsCount() {
+        const countSpan = document.getElementById('participantsCount');
+        if (countSpan) {
+            countSpan.textContent = participants.length;
+        }
+    }
+    
+    function addParticipant(participantId) {
+        if (!participants.includes(participantId)) {
+            participants.push(participantId);
+            saveParticipants();
+            return true;
+        }
+        return false;
+    }
+    
+    function isUserRegistered() {
+        const userId = getUserId();
+        return participants.includes(userId);
+    }
+    
+    function getUserId() {
+        let id = localStorage.getItem('user_id');
+        if (!id) {
+            id = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('user_id', id);
+        }
+        return id;
+    }
+
     // Глобальные переменные
-    let isRegistered = false;
     let hasNotified5min = false;
     let currentPrize = getRandomLegendary();
+    let winnerDeclared = false;
 
     function updatePrizeDisplay() {
-        currentPrize = getRandomLegendary();
-        document.getElementById('prizeName').innerHTML = `🎲 ${currentPrize.name} (${currentPrize.baseValue} value)`;
+        if (!winnerDeclared) {
+            currentPrize = getRandomLegendary();
+            document.getElementById('prizeName').innerHTML = `🎲 ${currentPrize.name} (${currentPrize.baseValue} value)`;
+        }
     }
 
     function getMskTime() {
@@ -700,6 +762,7 @@
         timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         
         // За 5 минут до 18:00 уведомление
+        const isRegistered = isUserRegistered();
         if (isRegistered && seconds <= 300 && seconds > 0 && !hasNotified5min) {
             hasNotified5min = true;
             const statusDiv = document.getElementById('joinStatus');
@@ -717,11 +780,13 @@
     }
 
     function register() {
-        if (isRegistered) {
+        const userId = getUserId();
+        
+        if (isUserRegistered()) {
             const statusDiv = document.getElementById('joinStatus');
             statusDiv.style.display = 'block';
             statusDiv.className = 'join-status warning';
-            statusDiv.innerHTML = '⚠️ Вы уже зарегистрированы на уведомление!';
+            statusDiv.innerHTML = '⚠️ Вы уже зарегистрированы на розыгрыш!';
             setTimeout(() => {
                 statusDiv.style.opacity = '0';
                 setTimeout(() => { statusDiv.style.display = 'none'; statusDiv.style.opacity = '1'; }, 2000);
@@ -729,7 +794,7 @@
             return;
         }
         
-        isRegistered = true;
+        addParticipant(userId);
         const registerBtn = document.getElementById('registerBtn');
         registerBtn.textContent = '✅ ВЫ ЗАРЕГИСТРИРОВАНЫ';
         registerBtn.classList.add('registered');
@@ -737,11 +802,23 @@
         const statusDiv = document.getElementById('joinStatus');
         statusDiv.style.display = 'block';
         statusDiv.className = 'join-status success';
-        statusDiv.innerHTML = '✅ Вы успешно зарегистрированы! За 5 минут до 18:00 МСК придёт уведомление. Заходите в чат и будьте первым! 🍀';
+        statusDiv.innerHTML = `✅ Вы успешно зарегистрированы! (Всего участников: ${participants.length}) За 5 минут до 18:00 МСК придёт уведомление. Заходите в чат и будьте первым! 🍀`;
         setTimeout(() => {
             statusDiv.style.opacity = '0';
             setTimeout(() => { statusDiv.style.display = 'none'; statusDiv.style.opacity = '1'; }, 3000);
         }, 4000);
+    }
+
+    // Обновление статуса кнопки регистрации при загрузке
+    function updateRegisterButton() {
+        const registerBtn = document.getElementById('registerBtn');
+        if (isUserRegistered()) {
+            registerBtn.textContent = '✅ ВЫ ЗАРЕГИСТРИРОВАНЫ';
+            registerBtn.classList.add('registered');
+        } else {
+            registerBtn.textContent = '📝 ЗАРЕГИСТРИРОВАТЬСЯ';
+            registerBtn.classList.remove('registered');
+        }
     }
 
     // Код калькулятора и фильтров
@@ -888,6 +965,7 @@
     }
 
     function init() {
+        loadParticipants();
         renderCategories();
         bindFilters();
         applyFiltersAndRender();
@@ -916,6 +994,13 @@
         });
         
         document.getElementById('registerBtn').addEventListener('click', register);
+        updateRegisterButton();
+        
+        // Обновляем счётчик каждую секунду (на случай, если кто-то зарегистрировался в другой вкладке)
+        setInterval(() => {
+            loadParticipants();
+            updateRegisterButton();
+        }, 1000);
     }
     
     init();
