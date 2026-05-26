@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>TTD Value List</title>
+    <title>TTD Value List - Розыгрыш</title>
     <style>
         * {
             margin: 0;
@@ -122,6 +122,184 @@
             padding: 6px 14px;
             border-radius: 40px;
             font-size: 0.8rem;
+        }
+
+        /* Розыгрыш */
+        .giveaway-section {
+            background: linear-gradient(135deg, #1a1f32, #0f1222);
+            border-radius: 24px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            border: 1px solid #f5b04230;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .giveaway-section::before {
+            content: "🎲";
+            position: absolute;
+            right: -20px;
+            top: -20px;
+            font-size: 120px;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .giveaway-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .giveaway-btn {
+            background: linear-gradient(135deg, #f5b042, #e67e22);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(245, 176, 66, 0.3);
+        }
+
+        .giveaway-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(245, 176, 66, 0.4);
+        }
+
+        .giveaway-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f5b042, #ffdc97);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .rules-panel {
+            background: #0c1020;
+            border-radius: 20px;
+            padding: 16px 20px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .rules-panel.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .rules-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #f5b042;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rules-list {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .rules-list li {
+            margin: 10px 0;
+            font-size: 0.85rem;
+            color: #b0b9dc;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rules-list li::before {
+            content: "🎁";
+            font-size: 0.8rem;
+        }
+
+        .prize-preview {
+            background: #1a1f32;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .prize-name {
+            font-weight: 700;
+            color: #f5b042;
+            font-size: 1.1rem;
+        }
+
+        .timer {
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffdc97;
+        }
+
+        .join-status {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .join-status.success { background: #1f5733; color: #b8ffcf; }
+        .join-status.error { background: #6b2e4a; color: #ffbcda; }
+        .join-status.warning { background: #7a5a2c; color: #ffe1a0; }
+        .join-status.info { background: #2c5f8a; color: #b8e2ff; }
+
+        .register-btn {
+            background: #2c3550;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            width: 100%;
+            transition: 0.2s;
+        }
+
+        .register-btn.registered {
+            background: #1f5733;
+            color: #b8ffcf;
+        }
+
+        .chat-link {
+            display: inline-block;
+            background: #1a1f32;
+            padding: 4px 12px;
+            border-radius: 30px;
+            color: #f5b042;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .chat-link:hover {
+            background: #2c3550;
+            transform: scale(1.02);
         }
 
         .control-panel {
@@ -326,10 +504,6 @@
             font-weight: 500;
         }
 
-        .clear-calc-btn:hover {
-            background: #8a3b60;
-        }
-
         .calculator-items {
             display: flex;
             flex-wrap: wrap;
@@ -350,77 +524,15 @@
             font-size: 0.85rem;
         }
 
-        .calc-unit-name {
-            font-weight: 600;
-        }
-
-        .calc-unit-count {
-            background: #2c3550;
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            color: #ffdc97;
-        }
-
-        .calc-unit-value {
-            color: #f5b042;
-            font-weight: 700;
-            min-width: 70px;
-        }
-
-        .calc-unit-controls {
-            display: flex;
-            gap: 6px;
-            margin-left: 4px;
-        }
-
-        .calc-unit-controls button {
-            background: #2a2f48;
-            border: none;
-            color: white;
-            width: 26px;
-            height: 26px;
-            border-radius: 13px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .calc-unit-controls button:hover {
-            background: #4a5a8a;
-        }
-
-        .calculator-total {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 16px;
-            border-top: 1px solid #1e2335;
-            font-size: 1.2rem;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .total-label {
-            font-weight: 600;
-            color: #b9c3f0;
-        }
-
-        .total-value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #f5b042, #ffdc97);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        .empty-calc {
-            color: #6f7aa3;
-            text-align: center;
-            padding: 20px;
-            font-size: 0.85rem;
-            width: 100%;
-        }
+        .calc-unit-name { font-weight: 600; }
+        .calc-unit-count { background: #2c3550; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; color: #ffdc97; }
+        .calc-unit-value { color: #f5b042; font-weight: 700; min-width: 70px; }
+        .calc-unit-controls { display: flex; gap: 6px; margin-left: 4px; }
+        .calc-unit-controls button { background: #2a2f48; border: none; color: white; width: 26px; height: 26px; border-radius: 13px; cursor: pointer; font-size: 0.9rem; }
+        .calculator-total { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid #1e2335; font-size: 1.2rem; flex-wrap: wrap; gap: 12px; }
+        .total-label { font-weight: 600; color: #b9c3f0; }
+        .total-value { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #f5b042, #ffdc97); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .empty-calc { color: #6f7aa3; text-align: center; padding: 20px; font-size: 0.85rem; width: 100%; }
 
         @media (max-width: 800px) {
             .main-row { flex-direction: column; }
@@ -446,6 +558,29 @@
                     <span class="partner-creator">@vvblaze74</span>
                 </div>
                 <div class="take-me-there">Take me there →</div>
+            </div>
+
+            <!-- РОЗЫГРЫШ -->
+            <div class="giveaway-section">
+                <div class="giveaway-header">
+                    <button id="giveawayBtn" class="giveaway-btn">🎲 РОЗЫГРЫШ ЛЕГЕНДАРКИ</button>
+                    <span class="giveaway-title">⚡ Участвуй и выиграй!</span>
+                </div>
+                <div id="rulesPanel" class="rules-panel">
+                    <div class="rules-title">📜 ПРАВИЛА УЧАСТИЯ</div>
+                    <ul class="rules-list">
+                        <li>Быть в чате <a href="https://t.me/gavegalonuGroup" target="_blank" class="chat-link">@gavegalonuGroup</a> 📱</li>
+                        <li>Написать в чат <strong style="color:#ffdc97">"я люблю этот чат"</strong> ровно в <strong style="color:#ffdc97">18:00 по МСК</strong></li>
+                        <li><strong style="color:#ffdc97">Первый, кто напишет</strong> — забирает легендарку! 🏆</li>
+                    </ul>
+                    <div class="prize-preview">
+                        <span>🏆 ПРИЗ:</span>
+                        <span class="prize-name" id="prizeName">🎲 Случайная легендарка...</span>
+                        <span id="timerDisplay" class="timer">--:--:--</span>
+                    </div>
+                    <button id="registerBtn" class="register-btn">📝 ЗАРЕГИСТРИРОВАТЬСЯ НА УВЕДОМЛЕНИЕ</button>
+                    <div id="joinStatus" class="join-status" style="display: none;"></div>
+                </div>
             </div>
 
             <div class="control-panel">
@@ -489,15 +624,13 @@
         </div>
         <div class="calculator-total">
             <span class="total-label">💰 TOTAL VALUE:</span>
-            <div>
-                <span class="total-value" id="calculatorTotal">0</span>
-            </div>
+            <div><span class="total-value" id="calculatorTotal">0</span></div>
         </div>
     </div>
 </div>
 
 <script>
-    // ========= ВСЕ ЮНИТЫ =========
+    // ЮНИТЫ
     const unitsDatabase = [
         { id: 1, name: "Camerawoman", rarity: "Basic", baseValue: 1, stability: "Underpaid For", lastChange: "+0", category: "Basic" },
         { id: 2, name: "Speakerman", rarity: "Basic", baseValue: 0, stability: "Stable", lastChange: "+0", category: "Basic" },
@@ -533,10 +666,87 @@
         { id: 32, name: "Engineer Cameraman", rarity: "Exclusive", baseValue: 15000, stability: "Overpaid For", lastChange: "+500", category: "Exclusive" }
     ];
 
+    const legendaryItems = unitsDatabase.filter(u => u.rarity === "Legendary");
+    function getRandomLegendary() { return legendaryItems[Math.floor(Math.random() * legendaryItems.length)]; }
+
+    // Глобальные переменные
+    let isRegistered = false;
+    let hasNotified5min = false;
+    let currentPrize = getRandomLegendary();
+
+    function updatePrizeDisplay() {
+        currentPrize = getRandomLegendary();
+        document.getElementById('prizeName').innerHTML = `🎲 ${currentPrize.name} (${currentPrize.baseValue} value)`;
+    }
+
+    function getMskTime() {
+        return new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Moscow" }));
+    }
+
+    function getSecondsUntil18() {
+        const now = getMskTime();
+        const target = new Date(now);
+        target.setHours(18, 0, 0, 0);
+        if (now >= target) target.setDate(target.getDate() + 1);
+        return Math.floor((target - now) / 1000);
+    }
+
+    function updateTimer() {
+        const timerElement = document.getElementById('timerDisplay');
+        const seconds = getSecondsUntil18();
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        
+        // За 5 минут до 18:00 уведомление
+        if (isRegistered && seconds <= 300 && seconds > 0 && !hasNotified5min) {
+            hasNotified5min = true;
+            const statusDiv = document.getElementById('joinStatus');
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'join-status info';
+            statusDiv.innerHTML = '⏰ ВНИМАНИЕ! До розыгрыша 5 минут! Заходите в чат @gavegalonuGroup и готовьтесь написать "я люблю этот чат" ровно в 18:00! ⏰';
+            setTimeout(() => {
+                statusDiv.style.opacity = '0';
+                setTimeout(() => {
+                    if (statusDiv.style.display !== 'none') statusDiv.style.display = 'none';
+                    statusDiv.style.opacity = '1';
+                }, 5000);
+            }, 10000);
+        }
+    }
+
+    function register() {
+        if (isRegistered) {
+            const statusDiv = document.getElementById('joinStatus');
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'join-status warning';
+            statusDiv.innerHTML = '⚠️ Вы уже зарегистрированы на уведомление!';
+            setTimeout(() => {
+                statusDiv.style.opacity = '0';
+                setTimeout(() => { statusDiv.style.display = 'none'; statusDiv.style.opacity = '1'; }, 2000);
+            }, 3000);
+            return;
+        }
+        
+        isRegistered = true;
+        const registerBtn = document.getElementById('registerBtn');
+        registerBtn.textContent = '✅ ВЫ ЗАРЕГИСТРИРОВАНЫ';
+        registerBtn.classList.add('registered');
+        
+        const statusDiv = document.getElementById('joinStatus');
+        statusDiv.style.display = 'block';
+        statusDiv.className = 'join-status success';
+        statusDiv.innerHTML = '✅ Вы успешно зарегистрированы! За 5 минут до 18:00 МСК придёт уведомление. Заходите в чат и будьте первым! 🍀';
+        setTimeout(() => {
+            statusDiv.style.opacity = '0';
+            setTimeout(() => { statusDiv.style.display = 'none'; statusDiv.style.opacity = '1'; }, 3000);
+        }, 4000);
+    }
+
+    // Код калькулятора и фильтров
     const rarityOrder = ["Basic", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Exclusive"];
     let currentCategory = "Basic";
-    
-    // Калькулятор: массив { id, name, currentValue }
     let calculatorItems = [];
 
     function getStabilityClass(stability) {
@@ -547,142 +757,80 @@
         return "stable";
     }
 
-    function getCalculatorTotal() {
-        let total = 0;
-        for (let item of calculatorItems) {
-            total += item.currentValue;
-        }
-        return total;
-    }
+    function getCalculatorTotal() { return calculatorItems.reduce((sum, item) => sum + item.currentValue, 0); }
 
     function updateCalculatorUI() {
         const container = document.getElementById('calculatorItemsList');
         const totalSpan = document.getElementById('calculatorTotal');
-        
         if (calculatorItems.length === 0) {
             container.innerHTML = '<div class="empty-calc">No units added. Click +1 on any unit to add to calculator.</div>';
             totalSpan.innerText = '0';
             return;
         }
-        
-        // Группируем одинаковые имена с суммой цен
         const grouped = {};
         for (let item of calculatorItems) {
-            if (!grouped[item.name]) {
-                grouped[item.name] = {
-                    count: 0,
-                    totalValue: 0,
-                    items: []
-                };
-            }
+            if (!grouped[item.name]) grouped[item.name] = { count: 0, totalValue: 0, items: [] };
             grouped[item.name].count++;
             grouped[item.name].totalValue += item.currentValue;
             grouped[item.name].items.push(item);
         }
-        
         let html = '';
         for (let name in grouped) {
             const group = grouped[name];
-            html += `
-                <div class="calc-unit" data-name="${name}">
-                    <span class="calc-unit-name">${name}</span>
-                    <span class="calc-unit-count">x${group.count}</span>
-                    <span class="calc-unit-value">💰 ${group.totalValue.toLocaleString()}</span>
-                    <div class="calc-unit-controls">
-                        <button class="calc-dec-btn-group" data-name="${name}">-1</button>
-                        <button class="calc-inc-btn-group" data-name="${name}">+1</button>
-                    </div>
-                </div>
-            `;
+            html += `<div class="calc-unit" data-name="${name}">
+                        <span class="calc-unit-name">${name}</span>
+                        <span class="calc-unit-count">x${group.count}</span>
+                        <span class="calc-unit-value">💰 ${group.totalValue.toLocaleString()}</span>
+                        <div class="calc-unit-controls">
+                            <button class="calc-dec-btn-group" data-name="${name}">-1</button>
+                            <button class="calc-inc-btn-group" data-name="${name}">+1</button>
+                        </div>
+                    </div>`;
         }
         container.innerHTML = html;
         totalSpan.innerText = getCalculatorTotal().toLocaleString();
         
-        // Кнопки для группировки: добавляют/удаляют один экземпляр
         document.querySelectorAll('.calc-dec-btn-group').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const name = btn.getAttribute('data-name');
-                // Находим последний экземпляр с таким именем и удаляем
                 const index = calculatorItems.findLastIndex(item => item.name === name);
-                if (index !== -1) {
-                    calculatorItems.splice(index, 1);
-                    updateCalculatorUI();
-                }
+                if (index !== -1) calculatorItems.splice(index, 1);
+                updateCalculatorUI();
             });
         });
-        
         document.querySelectorAll('.calc-inc-btn-group').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const name = btn.getAttribute('data-name');
                 const unit = unitsDatabase.find(u => u.name === name);
-                if (unit) {
-                    calculatorItems.push({
-                        id: unit.id,
-                        name: unit.name,
-                        currentValue: unit.baseValue
-                    });
-                    updateCalculatorUI();
-                }
+                if (unit) { calculatorItems.push({ id: unit.id, name: unit.name, currentValue: unit.baseValue }); updateCalculatorUI(); }
             });
         });
     }
 
     function addToCalculator(unitId) {
         const unit = unitsDatabase.find(u => u.id === unitId);
-        if (unit) {
-            calculatorItems.push({
-                id: unit.id,
-                name: unit.name,
-                currentValue: unit.baseValue
-            });
-            updateCalculatorUI();
-        }
+        if (unit) { calculatorItems.push({ id: unit.id, name: unit.name, currentValue: unit.baseValue }); updateCalculatorUI(); }
     }
-
     function removeFromCalculator(unitId) {
         const index = calculatorItems.findLastIndex(item => item.id === unitId);
-        if (index !== -1) {
-            calculatorItems.splice(index, 1);
-            updateCalculatorUI();
-        }
-    }
-
-    function clearCalculator() {
-        calculatorItems = [];
+        if (index !== -1) calculatorItems.splice(index, 1);
         updateCalculatorUI();
     }
-
-    function modifyUnitValue(unitId, delta) {
-        if (delta === 1) {
-            addToCalculator(unitId);
-        } else if (delta === -1) {
-            removeFromCalculator(unitId);
-        }
-    }
+    function clearCalculator() { calculatorItems = []; updateCalculatorUI(); }
+    function modifyUnitValue(unitId, delta) { if (delta === 1) addToCalculator(unitId); else if (delta === -1) removeFromCalculator(unitId); }
 
     function renderCategories() {
         const container = document.getElementById('categoriesList');
         let html = '';
         rarityOrder.forEach(rarity => {
             const activeClass = (currentCategory === rarity) ? 'active' : '';
-            html += `
-                <div class="category-item ${activeClass}" data-category="${rarity}">
-                    <span class="category-icon">🐟</span>
-                    <span>${rarity}</span>
-                </div>
-            `;
+            html += `<div class="category-item ${activeClass}" data-category="${rarity}"><span class="category-icon">🐟</span><span>${rarity}</span></div>`;
         });
         container.innerHTML = html;
-        
         document.querySelectorAll('.category-item').forEach(el => {
-            el.addEventListener('click', () => {
-                const cat = el.getAttribute('data-category');
-                currentCategory = cat;
-                renderCategories();
-                applyFiltersAndRender();
-            });
+            el.addEventListener('click', () => { currentCategory = el.getAttribute('data-category'); renderCategories(); applyFiltersAndRender(); });
         });
     }
 
@@ -690,82 +838,42 @@
         const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
         const stabilityFilter = document.getElementById('stabilitySelect').value;
         const sortType = document.getElementById('sortSelect').value;
-
         let filtered = unitsDatabase.filter(unit => unit.category === currentCategory);
-
-        if (searchTerm) {
-            filtered = filtered.filter(unit => unit.name.toLowerCase().includes(searchTerm));
-        }
-        if (stabilityFilter !== "all") {
-            filtered = filtered.filter(unit => unit.stability === stabilityFilter);
-        }
-        if (sortType === "value-high") {
-            filtered.sort((a,b) => b.baseValue - a.baseValue);
-        } else if (sortType === "value-low") {
-            filtered.sort((a,b) => a.baseValue - b.baseValue);
-        }
+        if (searchTerm) filtered = filtered.filter(unit => unit.name.toLowerCase().includes(searchTerm));
+        if (stabilityFilter !== "all") filtered = filtered.filter(unit => unit.stability === stabilityFilter);
+        if (sortType === "value-high") filtered.sort((a,b) => b.baseValue - a.baseValue);
+        else if (sortType === "value-low") filtered.sort((a,b) => a.baseValue - b.baseValue);
         return filtered;
     }
 
     function renderItems() {
         const filtered = getFilteredItems();
         const grid = document.getElementById('itemsGrid');
-        if (!filtered.length) {
-            grid.innerHTML = `<div class="no-results">✨ No units in ${currentCategory} category ✨</div>`;
-            return;
-        }
-
+        if (!filtered.length) { grid.innerHTML = `<div class="no-results">✨ No units in ${currentCategory} category ✨</div>`; return; }
         let html = '';
         filtered.forEach(unit => {
             const stabilityClass = getStabilityClass(unit.stability);
-            html += `
-                <div class="item-card" data-id="${unit.id}">
-                    <div class="item-name">${unit.name}</div>
-                    <div class="value-row">
-                        <span class="value-label">Value</span>
-                        <div class="value-control">
-                            <button class="dec-btn" data-id="${unit.id}">-1</button>
-                            <span class="current-value">${unit.baseValue.toLocaleString()}</span>
-                            <button class="inc-btn" data-id="${unit.id}">+1</button>
+            html += `<div class="item-card">
+                        <div class="item-name">${unit.name}</div>
+                        <div class="value-row">
+                            <span class="value-label">Value</span>
+                            <div class="value-control">
+                                <button class="dec-btn" data-id="${unit.id}">-1</button>
+                                <span class="current-value">${unit.baseValue.toLocaleString()}</span>
+                                <button class="inc-btn" data-id="${unit.id}">+1</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Stability</span>
-                        <span class="detail-value"><span class="stability-badge ${stabilityClass}">${unit.stability}</span></span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Rarity</span>
-                        <span class="detail-value">${unit.rarity}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Last Change in Value</span>
-                        <span class="detail-value">${unit.lastChange}</span>
-                    </div>
-                </div>
-            `;
+                        <div class="detail-row"><span class="detail-label">Stability</span><span class="detail-value"><span class="stability-badge ${stabilityClass}">${unit.stability}</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Rarity</span><span class="detail-value">${unit.rarity}</span></div>
+                        <div class="detail-row"><span class="detail-label">Last Change in Value</span><span class="detail-value">${unit.lastChange}</span></div>
+                    </div>`;
         });
         grid.innerHTML = html;
-
-        document.querySelectorAll('.inc-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const id = parseInt(btn.getAttribute('data-id'));
-                modifyUnitValue(id, 1);
-            });
-        });
-        document.querySelectorAll('.dec-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const id = parseInt(btn.getAttribute('data-id'));
-                modifyUnitValue(id, -1);
-            });
-        });
+        document.querySelectorAll('.inc-btn').forEach(btn => btn.addEventListener('click', () => modifyUnitValue(parseInt(btn.dataset.id), 1)));
+        document.querySelectorAll('.dec-btn').forEach(btn => btn.addEventListener('click', () => modifyUnitValue(parseInt(btn.dataset.id), -1)));
     }
 
-    function applyFiltersAndRender() {
-        renderItems();
-    }
-
+    function applyFiltersAndRender() { renderItems(); }
     function bindFilters() {
         document.getElementById('searchInput').addEventListener('input', () => applyFiltersAndRender());
         document.getElementById('filterBtn').addEventListener('click', () => applyFiltersAndRender());
@@ -779,10 +887,38 @@
         document.getElementById('clearCalculatorBtn').addEventListener('click', () => clearCalculator());
     }
 
-    renderCategories();
-    bindFilters();
-    applyFiltersAndRender();
-    updateCalculatorUI();
+    function init() {
+        renderCategories();
+        bindFilters();
+        applyFiltersAndRender();
+        updateCalculatorUI();
+        
+        const giveawayBtn = document.getElementById('giveawayBtn');
+        const rulesPanel = document.getElementById('rulesPanel');
+        let isRulesOpen = false;
+        
+        updatePrizeDisplay();
+        setInterval(updatePrizeDisplay, 30000);
+        setInterval(updateTimer, 1000);
+        updateTimer();
+        
+        giveawayBtn.addEventListener('click', () => {
+            if (!isRulesOpen) {
+                rulesPanel.classList.add('show');
+                isRulesOpen = true;
+                giveawayBtn.textContent = '🎲 ЗАКРЫТЬ РОЗЫГРЫШ';
+            } else {
+                rulesPanel.classList.remove('show');
+                isRulesOpen = false;
+                giveawayBtn.textContent = '🎲 РОЗЫГРЫШ ЛЕГЕНДАРКИ';
+                document.getElementById('joinStatus').style.display = 'none';
+            }
+        });
+        
+        document.getElementById('registerBtn').addEventListener('click', register);
+    }
+    
+    init();
 </script>
 </body>
 </html>
