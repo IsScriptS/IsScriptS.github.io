@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -247,10 +247,11 @@
         }
 
         .current-value {
-            font-size: 1.3rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 600;
             min-width: 70px;
             text-align: center;
+            color: #f5b042;
         }
 
         .detail-row {
@@ -345,17 +346,12 @@
             padding: 8px 14px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             font-size: 0.85rem;
         }
 
         .calc-unit-name {
             font-weight: 600;
-        }
-
-        .calc-unit-value {
-            color: #f5b042;
-            font-weight: 700;
         }
 
         .calc-unit-count {
@@ -366,14 +362,31 @@
             color: #ffdc97;
         }
 
-        .remove-unit-btn {
-            background: #2a1f2c;
+        .calc-unit-value {
+            color: #f5b042;
+            font-weight: 700;
+            min-width: 70px;
+        }
+
+        .calc-unit-controls {
+            display: flex;
+            gap: 6px;
+            margin-left: 4px;
+        }
+
+        .calc-unit-controls button {
+            background: #2a2f48;
             border: none;
-            color: #ffaa88;
+            color: white;
+            width: 26px;
+            height: 26px;
+            border-radius: 13px;
             cursor: pointer;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
+            font-size: 0.9rem;
+        }
+
+        .calc-unit-controls button:hover {
+            background: #4a5a8a;
         }
 
         .calculator-total {
@@ -429,8 +442,6 @@
                     <span>partner:</span>
                     <span class="partner-creator">@Kola2_l</span>
                     <span class="partner-creator">Xmyrni_Alkogolik</span>
-                    <span class="partner-creator">@Fotty46</span>
-                    <span class="partner-creator">@vvblaze74</span>
                 </div>
                 <div class="take-me-there">Take me there →</div>
             </div>
@@ -472,10 +483,10 @@
             <button id="clearCalculatorBtn" class="clear-calc-btn">🗑️ Clear All</button>
         </div>
         <div id="calculatorItemsList" class="calculator-items">
-            <div class="empty-calc">No units added. Click +1 or -1 on any unit to add to calculator.</div>
+            <div class="empty-calc">No units added. Click +1 on any unit to add to calculator.</div>
         </div>
         <div class="calculator-total">
-            <span class="total-label">💰 TOTAL VALUE (Ranged):</span>
+            <span class="total-label">💰 TOTAL VALUE:</span>
             <div>
                 <span class="total-value" id="calculatorTotal">0</span>
             </div>
@@ -484,45 +495,46 @@
 </div>
 
 <script>
-    // ========= ВСЕ ЮНИТЫ С ОБНОВЛЕННЫМИ ЦЕНАМИ =========
+    // ========= ВСЕ ЮНИТЫ =========
     const unitsDatabase = [
-        { id: 1, name: "Camerawoman", rarity: "Basic", rangedValue: "1", stability: "Underpaid For", lastChange: "+0", category: "Basic" },
-        { id: 2, name: "Speakerman", rarity: "Basic", rangedValue: "0", stability: "Stable", lastChange: "+0", category: "Basic" },
-        { id: 3, name: "Car Speakerman", rarity: "Uncommon", rangedValue: "1", stability: "Stable", lastChange: "+0", category: "Uncommon" },
-        { id: 4, name: "Cameraman", rarity: "Uncommon", rangedValue: "1", stability: "Stable", lastChange: "+0", category: "Uncommon" },
-        { id: 5, name: "Tv Man", rarity: "Rare", rangedValue: "1-2", stability: "Stable", lastChange: "+0", category: "Rare" },
-        { id: 6, name: "Large Speakerman", rarity: "Rare", rangedValue: "2", stability: "Stable", lastChange: "+0", category: "Rare" },
-        { id: 7, name: "Speaker Helicopter", rarity: "Rare", rangedValue: "1-2", stability: "Stable", lastChange: "+0", category: "Rare" },
-        { id: 8, name: "Camer Helicopter", rarity: "Epic", rangedValue: "13-18", stability: "Stable", lastChange: "+1", category: "Epic" },
-        { id: 9, name: "Large Tv Man", rarity: "Epic", rangedValue: "10", stability: "Stable", lastChange: "+0", category: "Epic" },
-        { id: 10, name: "Large Cameraman", rarity: "Epic", rangedValue: "11", stability: "Stable", lastChange: "+0", category: "Epic" },
-        { id: 11, name: "Surveillance Camerawoman", rarity: "Epic", rangedValue: "7-10", stability: "Stable", lastChange: "+0", category: "Epic" },
-        { id: 12, name: "Medic Cameraman", rarity: "Epic", rangedValue: "6-10", stability: "Underpaid For", lastChange: "-1", category: "Epic" },
-        { id: 13, name: "Secret Agent", rarity: "Legendary", rangedValue: "50-55", stability: "Underpaid For", lastChange: "-3", category: "Legendary" },
-        { id: 14, name: "Dark Speakerman", rarity: "Legendary", rangedValue: "55-60", stability: "Underpaid For", lastChange: "+0", category: "Legendary" },
-        { id: 15, name: "Ninja Cameraman", rarity: "Legendary", rangedValue: "65-70", stability: "Doing Well", lastChange: "+5", category: "Legendary" },
-        { id: 16, name: "Dancing Speakerwomen", rarity: "Legendary", rangedValue: "50-60", stability: "Underpaid For", lastChange: "-2", category: "Legendary" },
-        { id: 17, name: "Titan Speakerman", rarity: "Legendary", rangedValue: "60-65", stability: "Stable", lastChange: "+5", category: "Legendary" },
-        { id: 18, name: "Mech Cameraman", rarity: "Legendary", rangedValue: "120-130", stability: "Doing Well", lastChange: "+5", category: "Legendary" },
-        { id: 19, name: "Laser Cameraman Car", rarity: "Legendary", rangedValue: "130-140", stability: "Overpaid For", lastChange: "+10", category: "Legendary" },
-        { id: 20, name: "Titan Cinemaman", rarity: "Mythic", rangedValue: "1000-1100", stability: "Stable", lastChange: "+0", category: "Mythic" },
-        { id: 21, name: "Upgraded Titan Speakerman", rarity: "Mythic", rangedValue: "1500-1600", stability: "Stable", lastChange: "+50", category: "Mythic" },
-        { id: 22, name: "Upgraded Titan Cameraman", rarity: "Mythic", rangedValue: "2000-2200", stability: "Doing Well", lastChange: "+50", category: "Mythic" },
-        { id: 23, name: "Speaker Spider", rarity: "Exclusive", rangedValue: "50-60", stability: "Stable", lastChange: "-5", category: "Exclusive" },
-        { id: 24, name: "Camera Spider", rarity: "Exclusive", rangedValue: "150", stability: "Stable", lastChange: "+5", category: "Exclusive" },
-        { id: 25, name: "Camera Repair Drone", rarity: "Exclusive", rangedValue: "300", stability: "Stable", lastChange: "+0", category: "Exclusive" },
-        { id: 26, name: "Jetpack Cameraman", rarity: "Exclusive", rangedValue: "190-220", stability: "Stable", lastChange: "+5", category: "Exclusive" },
-        { id: 27, name: "Titan Cameraman", rarity: "Exclusive", rangedValue: "190-200", stability: "Stable", lastChange: "+0", category: "Exclusive" },
-        { id: 28, name: "Tv Woman", rarity: "Exclusive", rangedValue: "60-65", stability: "Stable", lastChange: "+0", category: "Exclusive" },
-        { id: 29, name: "Scientist Cameraman", rarity: "Exclusive", rangedValue: "150-170", stability: "Overpaid For", lastChange: "+5", category: "Exclusive" },
-        { id: 30, name: "Large Scientist Cameraman", rarity: "Exclusive", rangedValue: "40", stability: "Stable", lastChange: "+0", category: "Exclusive" },
-        { id: 31, name: "Tv Spider", rarity: "Exclusive", rangedValue: "35000+", stability: "Overpaid For", lastChange: "+1000", category: "Exclusive" },
-        { id: 32, name: "Engineer Cameraman", rarity: "Exclusive", rangedValue: "15000+", stability: "Overpaid For", lastChange: "+500", category: "Exclusive" }
+        { id: 1, name: "Camerawoman", rarity: "Basic", baseValue: 1, stability: "Underpaid For", lastChange: "+0", category: "Basic" },
+        { id: 2, name: "Speakerman", rarity: "Basic", baseValue: 0, stability: "Stable", lastChange: "+0", category: "Basic" },
+        { id: 3, name: "Car Speakerman", rarity: "Uncommon", baseValue: 1, stability: "Stable", lastChange: "+0", category: "Uncommon" },
+        { id: 4, name: "Cameraman", rarity: "Uncommon", baseValue: 1, stability: "Stable", lastChange: "+0", category: "Uncommon" },
+        { id: 5, name: "Tv Man", rarity: "Rare", baseValue: 1, stability: "Stable", lastChange: "+0", category: "Rare" },
+        { id: 6, name: "Large Speakerman", rarity: "Rare", baseValue: 2, stability: "Stable", lastChange: "+0", category: "Rare" },
+        { id: 7, name: "Speaker Helicopter", rarity: "Rare", baseValue: 1, stability: "Stable", lastChange: "+0", category: "Rare" },
+        { id: 8, name: "Camer Helicopter", rarity: "Epic", baseValue: 13, stability: "Stable", lastChange: "+1", category: "Epic" },
+        { id: 9, name: "Large Tv Man", rarity: "Epic", baseValue: 10, stability: "Stable", lastChange: "+0", category: "Epic" },
+        { id: 10, name: "Large Cameraman", rarity: "Epic", baseValue: 11, stability: "Stable", lastChange: "+0", category: "Epic" },
+        { id: 11, name: "Surveillance Camerawoman", rarity: "Epic", baseValue: 7, stability: "Stable", lastChange: "+0", category: "Epic" },
+        { id: 12, name: "Medic Cameraman", rarity: "Epic", baseValue: 6, stability: "Underpaid For", lastChange: "-1", category: "Epic" },
+        { id: 13, name: "Secret Agent", rarity: "Legendary", baseValue: 50, stability: "Underpaid For", lastChange: "-3", category: "Legendary" },
+        { id: 14, name: "Dark Speakerman", rarity: "Legendary", baseValue: 55, stability: "Underpaid For", lastChange: "+0", category: "Legendary" },
+        { id: 15, name: "Ninja Cameraman", rarity: "Legendary", baseValue: 65, stability: "Doing Well", lastChange: "+5", category: "Legendary" },
+        { id: 16, name: "Dancing Speakerwomen", rarity: "Legendary", baseValue: 50, stability: "Underpaid For", lastChange: "-2", category: "Legendary" },
+        { id: 17, name: "Titan Speakerman", rarity: "Legendary", baseValue: 60, stability: "Stable", lastChange: "+5", category: "Legendary" },
+        { id: 18, name: "Mech Cameraman", rarity: "Legendary", baseValue: 120, stability: "Doing Well", lastChange: "+5", category: "Legendary" },
+        { id: 19, name: "Laser Cameraman Car", rarity: "Legendary", baseValue: 130, stability: "Overpaid For", lastChange: "+10", category: "Legendary" },
+        { id: 20, name: "Titan Cinemaman", rarity: "Mythic", baseValue: 1000, stability: "Stable", lastChange: "+0", category: "Mythic" },
+        { id: 21, name: "Upgraded Titan Speakerman", rarity: "Mythic", baseValue: 1500, stability: "Stable", lastChange: "+50", category: "Mythic" },
+        { id: 22, name: "Upgraded Titan Cameraman", rarity: "Mythic", baseValue: 2000, stability: "Doing Well", lastChange: "+50", category: "Mythic" },
+        { id: 23, name: "Speaker Spider", rarity: "Exclusive", baseValue: 50, stability: "Stable", lastChange: "-5", category: "Exclusive" },
+        { id: 24, name: "Camera Spider", rarity: "Exclusive", baseValue: 150, stability: "Stable", lastChange: "+5", category: "Exclusive" },
+        { id: 25, name: "Camera Repair Drone", rarity: "Exclusive", baseValue: 300, stability: "Stable", lastChange: "+0", category: "Exclusive" },
+        { id: 26, name: "Jetpack Cameraman", rarity: "Exclusive", baseValue: 190, stability: "Stable", lastChange: "+5", category: "Exclusive" },
+        { id: 27, name: "Titan Cameraman", rarity: "Exclusive", baseValue: 190, stability: "Stable", lastChange: "+0", category: "Exclusive" },
+        { id: 28, name: "Tv Woman", rarity: "Exclusive", baseValue: 60, stability: "Stable", lastChange: "+0", category: "Exclusive" },
+        { id: 29, name: "Scientist Cameraman", rarity: "Exclusive", baseValue: 150, stability: "Overpaid For", lastChange: "+5", category: "Exclusive" },
+        { id: 30, name: "Large Scientist Cameraman", rarity: "Exclusive", baseValue: 40, stability: "Stable", lastChange: "+0", category: "Exclusive" },
+        { id: 31, name: "Tv Spider", rarity: "Exclusive", baseValue: 35000, stability: "Overpaid For", lastChange: "+1000", category: "Exclusive" },
+        { id: 32, name: "Engineer Cameraman", rarity: "Exclusive", baseValue: 15000, stability: "Overpaid For", lastChange: "+500", category: "Exclusive" }
     ];
 
     const rarityOrder = ["Basic", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Exclusive"];
     let currentCategory = "Basic";
     
+    // Калькулятор: массив { id, name, currentValue }
     let calculatorItems = [];
 
     function getStabilityClass(stability) {
@@ -533,34 +545,12 @@
         return "stable";
     }
 
-    function getMinValue(rangedValue) {
-        if (rangedValue.includes('-')) {
-            return parseInt(rangedValue.split('-')[0]);
-        } else if (rangedValue.includes('+')) {
-            return parseInt(rangedValue.replace('+', ''));
-        } else {
-            return parseInt(rangedValue);
-        }
-    }
-
-    function getMaxValue(rangedValue) {
-        if (rangedValue.includes('-')) {
-            return parseInt(rangedValue.split('-')[1]);
-        } else if (rangedValue.includes('+')) {
-            return parseInt(rangedValue.replace('+', '')) + 500;
-        } else {
-            return parseInt(rangedValue);
-        }
-    }
-
     function getCalculatorTotal() {
-        let totalMin = 0;
-        let totalMax = 0;
+        let total = 0;
         for (let item of calculatorItems) {
-            totalMin += item.minVal;
-            totalMax += item.maxVal;
+            total += item.currentValue;
         }
-        return { min: totalMin, max: totalMax };
+        return total;
     }
 
     function updateCalculatorUI() {
@@ -568,47 +558,71 @@
         const totalSpan = document.getElementById('calculatorTotal');
         
         if (calculatorItems.length === 0) {
-            container.innerHTML = '<div class="empty-calc">No units added. Click +1 or -1 on any unit to add to calculator.</div>';
+            container.innerHTML = '<div class="empty-calc">No units added. Click +1 on any unit to add to calculator.</div>';
             totalSpan.innerText = '0';
             return;
         }
         
+        // Группируем одинаковые имена с суммой цен
         const grouped = {};
         for (let item of calculatorItems) {
             if (!grouped[item.name]) {
-                grouped[item.name] = { count: 0, rangedValue: item.rangedValue, id: item.id };
+                grouped[item.name] = {
+                    count: 0,
+                    totalValue: 0,
+                    items: []
+                };
             }
             grouped[item.name].count++;
+            grouped[item.name].totalValue += item.currentValue;
+            grouped[item.name].items.push(item);
         }
         
         let html = '';
         for (let name in grouped) {
-            const info = grouped[name];
+            const group = grouped[name];
             html += `
-                <div class="calc-unit" data-id="${info.id}">
+                <div class="calc-unit" data-name="${name}">
                     <span class="calc-unit-name">${name}</span>
-                    <span class="calc-unit-value">${info.rangedValue}</span>
-                    <span class="calc-unit-count">x${info.count}</span>
-                    <button class="remove-unit-btn" data-name="${name}">✕</button>
+                    <span class="calc-unit-count">x${group.count}</span>
+                    <span class="calc-unit-value">💰 ${group.totalValue.toLocaleString()}</span>
+                    <div class="calc-unit-controls">
+                        <button class="calc-dec-btn-group" data-name="${name}">-1</button>
+                        <button class="calc-inc-btn-group" data-name="${name}">+1</button>
+                    </div>
                 </div>
             `;
         }
         container.innerHTML = html;
+        totalSpan.innerText = getCalculatorTotal().toLocaleString();
         
-        const totals = getCalculatorTotal();
-        if (totals.min === totals.max) {
-            totalSpan.innerText = totals.min.toLocaleString();
-        } else {
-            totalSpan.innerText = `${totals.min.toLocaleString()} - ${totals.max.toLocaleString()}`;
-        }
-        
-        document.querySelectorAll('.remove-unit-btn').forEach(btn => {
+        // Кнопки для группировки: добавляют/удаляют один экземпляр
+        document.querySelectorAll('.calc-dec-btn-group').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const name = btn.getAttribute('data-name');
+                // Находим последний экземпляр с таким именем и удаляем
                 const index = calculatorItems.findLastIndex(item => item.name === name);
-                if (index !== -1) calculatorItems.splice(index, 1);
-                updateCalculatorUI();
+                if (index !== -1) {
+                    calculatorItems.splice(index, 1);
+                    updateCalculatorUI();
+                }
+            });
+        });
+        
+        document.querySelectorAll('.calc-inc-btn-group').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const name = btn.getAttribute('data-name');
+                const unit = unitsDatabase.find(u => u.name === name);
+                if (unit) {
+                    calculatorItems.push({
+                        id: unit.id,
+                        name: unit.name,
+                        currentValue: unit.baseValue
+                    });
+                    updateCalculatorUI();
+                }
             });
         });
     }
@@ -619,9 +633,7 @@
             calculatorItems.push({
                 id: unit.id,
                 name: unit.name,
-                rangedValue: unit.rangedValue,
-                minVal: getMinValue(unit.rangedValue),
-                maxVal: getMaxValue(unit.rangedValue)
+                currentValue: unit.baseValue
             });
             updateCalculatorUI();
         }
@@ -629,8 +641,10 @@
 
     function removeFromCalculator(unitId) {
         const index = calculatorItems.findLastIndex(item => item.id === unitId);
-        if (index !== -1) calculatorItems.splice(index, 1);
-        updateCalculatorUI();
+        if (index !== -1) {
+            calculatorItems.splice(index, 1);
+            updateCalculatorUI();
+        }
     }
 
     function clearCalculator() {
@@ -684,17 +698,9 @@
             filtered = filtered.filter(unit => unit.stability === stabilityFilter);
         }
         if (sortType === "value-high") {
-            filtered.sort((a,b) => {
-                const valA = getMinValue(a.rangedValue);
-                const valB = getMinValue(b.rangedValue);
-                return valB - valA;
-            });
+            filtered.sort((a,b) => b.baseValue - a.baseValue);
         } else if (sortType === "value-low") {
-            filtered.sort((a,b) => {
-                const valA = getMinValue(a.rangedValue);
-                const valB = getMinValue(b.rangedValue);
-                return valA - valB;
-            });
+            filtered.sort((a,b) => a.baseValue - b.baseValue);
         }
         return filtered;
     }
@@ -717,13 +723,9 @@
                         <span class="value-label">Value</span>
                         <div class="value-control">
                             <button class="dec-btn" data-id="${unit.id}">-1</button>
-                            <span class="current-value">${unit.rangedValue}</span>
+                            <span class="current-value">${unit.baseValue.toLocaleString()}</span>
                             <button class="inc-btn" data-id="${unit.id}">+1</button>
                         </div>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Ranged Value</span>
-                        <span class="detail-value">${unit.rangedValue}</span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Stability</span>
