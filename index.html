@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>TTD Value List</title>
+    <title>TTD Value List — Elite Tracker</title>
     <style>
         * {
             margin: 0;
@@ -12,9 +12,42 @@
         }
 
         body {
-            background: #0b0e17;
+            background: radial-gradient(circle at 10% 20%, #0a0c17, #03050b);
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
             color: #eef2ff;
+            scroll-behavior: smooth;
+        }
+
+        @keyframes subtlePulse {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes floatGlow {
+            0% { box-shadow: 0 0 0 0 rgba(245, 176, 66, 0.2); }
+            100% { box-shadow: 0 0 0 12px rgba(245, 176, 66, 0); }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeSlideRight {
+            from {
+                opacity: 0;
+                transform: translateX(-12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .app-layout {
@@ -29,89 +62,135 @@
             max-width: 1600px;
             margin: 0 auto;
             width: 100%;
+            gap: 0;
         }
 
         .categories-sidebar {
-            width: 260px;
-            background: #0c0f18;
-            border-right: 1px solid #1e2335;
+            width: 280px;
+            background: rgba(12, 15, 24, 0.75);
+            backdrop-filter: blur(8px);
+            border-right: 1px solid rgba(30, 35, 53, 0.6);
             flex-shrink: 0;
             height: calc(100vh - 280px);
             position: sticky;
             top: 0;
             overflow-y: auto;
-            padding: 24px 0 30px 0;
+            padding: 28px 0 30px 0;
+            transition: all 0.2s;
         }
 
         .categories-header {
-            font-size: 1rem;
+            font-size: 0.85rem;
             font-weight: 700;
-            padding: 0 20px 16px 24px;
-            border-bottom: 1px solid #1e2335;
-            margin-bottom: 16px;
-            color: #b9c3f0;
-            letter-spacing: 0.5px;
+            padding: 0 20px 20px 28px;
+            border-bottom: 1px solid rgba(30, 35, 53, 0.7);
+            margin-bottom: 18px;
+            color: #cad0f0;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
         }
 
         .category-item {
-            padding: 10px 20px 10px 32px;
+            padding: 12px 20px 12px 32px;
             cursor: pointer;
-            transition: all 0.12s;
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             border-left: 3px solid transparent;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.85rem;
-            color: #b0b9dc;
+            gap: 12px;
+            font-size: 0.9rem;
+            color: #a7b1da;
+            margin: 4px 12px;
+            border-radius: 12px 0 0 12px;
         }
 
         .category-item:hover {
-            background: #13182a;
-            border-left-color: #6c7bdb;
+            background: rgba(26, 31, 50, 0.8);
+            border-left-color: #f5b042;
             color: white;
+            transform: translateX(4px);
+            backdrop-filter: blur(4px);
         }
 
         .category-item.active {
-            background: #1a1f32;
+            background: linear-gradient(90deg, rgba(245, 176, 66, 0.15), rgba(26, 31, 50, 0.6));
             border-left-color: #f5b042;
-            color: white;
+            color: #fff5e6;
             font-weight: 500;
+            box-shadow: -2px 0 12px rgba(245, 176, 66, 0.2);
         }
 
-        /* Специальный стиль для кнопки гарантов */
         .category-item.garant-link {
-            margin-top: 16px;
-            border: 1px solid #f5b04230;
-            background: linear-gradient(135deg, #1a1f32, #1f253f);
+            margin-top: 28px;
+            background: linear-gradient(135deg, #1e243f, #13182c);
+            border: 1px solid rgba(245, 176, 66, 0.5);
+            border-radius: 60px;
+            justify-content: center;
+            transition: all 0.25s;
         }
 
         .category-item.garant-link:hover {
+            transform: scale(1.02);
             border-color: #f5b042;
-            background: linear-gradient(135deg, #2a3050, #2a354f);
+            background: linear-gradient(135deg, #2a3155, #1b213f);
+            box-shadow: 0 6px 14px rgba(245, 176, 66, 0.3);
         }
 
-        .category-icon {
-            font-size: 1rem;
+        /* Language tab */
+        .language-tab {
+            margin: 16px 12px 0 12px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 60px;
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .lang-btn {
+            flex: 1;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: #1a1f32;
+            color: #a7b1da;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .lang-btn.active {
+            background: #f5b042;
+            color: #0b0e17;
+            box-shadow: 0 0 10px rgba(245, 176, 66, 0.5);
+        }
+
+        .lang-btn:hover:not(.active) {
+            background: #2a2f4a;
+            color: white;
         }
 
         .main-content {
             flex: 1;
-            padding: 24px 28px;
+            padding: 28px 32px;
             overflow-y: auto;
+            animation: slideInUp 0.4s ease-out;
         }
 
         .partner-bar {
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
-            border-bottom: 1px solid #2a2e3f;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 14px;
+            margin-bottom: 26px;
             flex-wrap: wrap;
         }
 
         .partner {
-            color: #9aa4bf;
+            color: #a8b2db;
             font-weight: 500;
             display: flex;
             align-items: center;
@@ -120,111 +199,140 @@
         }
 
         .partner-creator {
-            background: #1a1f32;
-            padding: 4px 12px;
+            background: rgba(26, 31, 50, 0.8);
+            padding: 5px 14px;
             border-radius: 40px;
             font-size: 0.75rem;
             color: #f5b042;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .partner-creator:hover {
+            background: #f5b04220;
+            transform: translateY(-2px);
         }
 
         .take-me-there {
-            color: #6c7bdb;
+            color: #7e8de0;
             font-weight: 600;
-            background: rgba(108, 123, 219, 0.12);
-            padding: 6px 14px;
+            background: rgba(108, 123, 219, 0.2);
+            padding: 7px 18px;
             border-radius: 40px;
             font-size: 0.8rem;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
+            cursor: default;
         }
 
         .control-panel {
-            background: #10131f;
-            border-radius: 24px;
-            padding: 16px 22px;
-            margin: 16px 0 24px 0;
+            background: rgba(16, 19, 31, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 18px 24px;
+            margin: 16px 0 28px 0;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 16px;
+            gap: 18px;
             justify-content: space-between;
+            border: 1px solid rgba(54, 62, 90, 0.5);
+            transition: all 0.2s;
         }
 
         .search-area input {
-            background: #1e2337;
-            border: 1px solid #2e354f;
-            padding: 10px 18px;
-            border-radius: 40px;
+            background: #0c1020;
+            border: 1px solid #2e3555;
+            padding: 12px 20px;
+            border-radius: 60px;
             color: white;
             font-size: 0.85rem;
-            width: 240px;
+            width: 260px;
             outline: none;
+            transition: 0.2s;
         }
 
-        .filter-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+        .search-area input:focus {
+            border-color: #f5b042;
+            box-shadow: 0 0 8px rgba(245, 176, 66, 0.4);
         }
 
         .filter-group select, .filter-group button {
-            background: #1a1f31;
-            border: 1px solid #2e354f;
-            padding: 8px 14px;
-            border-radius: 30px;
-            color: #e0e6ff;
-            font-size: 0.75rem;
+            background: #11162a;
+            border: 1px solid #2e3555;
+            padding: 9px 16px;
+            border-radius: 60px;
+            color: #eef2ff;
+            font-size: 0.8rem;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-group button:hover, .sort-by select:hover {
+            background: #1f2542;
+            border-color: #f5b042;
+            transform: scale(0.98);
         }
 
         .sort-by {
-            background: #0e1220;
-            padding: 6px 16px;
-            border-radius: 32px;
+            background: rgba(14, 18, 32, 0.6);
+            padding: 6px 18px;
+            border-radius: 48px;
             font-size: 0.75rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .tier-title {
-            font-size: 1.6rem;
+            font-size: 1.9rem;
+            font-weight: 800;
+            margin-bottom: 28px;
+            background: linear-gradient(135deg, #ffffff, #cdd6ff, #f5b042);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+        }
+
+        .item-card {
+            background: rgba(17, 21, 34, 0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 22px 24px;
+            border: 1px solid rgba(42, 50, 80, 0.6);
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            animation: fadeSlideRight 0.35s ease-out;
+        }
+
+        .item-card:hover {
+            border-color: #f5b04280;
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(245, 176, 66, 0.2);
+        }
+
+        .item-name {
+            font-size: 1.45rem;
             font-weight: 700;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #ffffff, #aab3e0);
+            margin-bottom: 16px;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #f0f3ff, #cbd5ff);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
         }
 
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-        }
-
-        .item-card {
-            background: #111522;
-            border-radius: 24px;
-            padding: 18px 20px;
-            border: 1px solid #222838;
-            transition: 0.15s;
-        }
-
-        .item-card:hover {
-            border-color: #4c5a8c;
-        }
-
-        .item-name {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 14px;
-            letter-spacing: -0.2px;
-        }
-
         .value-row {
-            background: #0c1020;
-            border-radius: 16px;
-            padding: 10px 14px;
-            margin-bottom: 14px;
+            background: rgba(8, 11, 20, 0.7);
+            border-radius: 24px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -233,49 +341,55 @@
 
         .value-label {
             font-size: 0.75rem;
-            color: #8d99c6;
+            color: #9ca7d4;
+            text-transform: uppercase;
         }
 
         .value-control {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
         .value-control button {
-            background: #2a2f48;
+            background: #1e233f;
             border: none;
-            color: white;
-            font-size: 1.1rem;
+            color: #f5b042;
+            font-size: 1.2rem;
             font-weight: bold;
-            width: 32px;
-            height: 32px;
-            border-radius: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 30px;
             cursor: pointer;
+            transition: 0.15s;
         }
 
         .value-control button:hover {
-            background: #4a5a8a;
+            background: #f5b042;
+            color: #0b0e17;
+            transform: scale(1.07);
+            box-shadow: 0 0 8px #f5b042;
         }
 
         .current-value {
-            font-size: 1rem;
-            font-weight: 600;
-            min-width: 70px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            min-width: 80px;
             text-align: center;
-            color: #f5b042;
+            color: #ffd966;
+            text-shadow: 0 0 3px rgba(0,0,0,0.5);
         }
 
         .detail-row {
             display: flex;
             justify-content: space-between;
-            padding: 6px 0;
-            font-size: 0.75rem;
-            border-bottom: 1px dashed #252c40;
+            padding: 10px 0;
+            font-size: 0.8rem;
+            border-bottom: 1px dashed rgba(255,255,255,0.08);
         }
 
         .detail-label {
-            color: #8f99c2;
+            color: #9ca7cf;
         }
 
         .detail-value {
@@ -285,92 +399,135 @@
 
         .stability-badge {
             display: inline-block;
-            padding: 2px 10px;
-            border-radius: 40px;
+            padding: 4px 14px;
+            border-radius: 60px;
             font-size: 0.7rem;
+            font-weight: 600;
+            transition: 0.1s;
         }
 
-        .doing-well { background: #2c5f8a; color: #b8e2ff; }
-        .stable { background: #2d4059; color: #bedbff; }
-        .underpaid { background: #7a5a2c; color: #ffe1a0; }
-        .overpaid { background: #2a6b3c; color: #b8ffcf; }
+        .doing-well { background: #2c6e5c; color: #d0ffec; box-shadow: 0 0 4px #2c8f6e; }
+        .stable { background: #2d4b6e; color: #bfe2ff; }
+        .underpaid { background: #b86f2c; color: #fff0cf; }
+        .overpaid { background: #2b7c4a; color: #d4ffdf; }
 
         .no-results {
             text-align: center;
-            padding: 60px;
-            color: #7a85b0;
+            padding: 70px;
+            color: #98a2cf;
             grid-column: 1 / -1;
+            font-size: 1.1rem;
         }
 
         .calculator-section {
-            background: #0c0f18;
-            border-top: 2px solid #1e2335;
-            padding: 20px 28px;
+            background: rgba(8, 11, 20, 0.8);
+            backdrop-filter: blur(12px);
+            border-top: 2px solid rgba(245, 176, 66, 0.3);
+            padding: 26px 32px;
             width: 100%;
+            transition: all 0.2s;
         }
 
         .calculator-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 16px;
         }
 
         .calculator-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #f5b042, #ffdc97);
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f5b042, #ffde9e);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
+            letter-spacing: -0.3px;
         }
 
         .clear-calc-btn {
-            background: #6b2e4a;
-            border: none;
-            color: #ffbcda;
-            padding: 8px 20px;
-            border-radius: 30px;
+            background: rgba(107, 46, 74, 0.8);
+            border: 1px solid #f5b04240;
+            color: #ffd7b0;
+            padding: 8px 24px;
+            border-radius: 60px;
             cursor: pointer;
             font-size: 0.8rem;
-            font-weight: 500;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .clear-calc-btn:hover {
+            background: #9b4b6e;
+            border-color: #f5b042;
+            transform: scale(0.96);
         }
 
         .calculator-items {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 20px;
-            max-height: 200px;
+            gap: 14px;
+            margin-bottom: 24px;
+            max-height: 210px;
             overflow-y: auto;
             padding: 8px 4px;
         }
 
         .calc-unit {
-            background: #1a1f32;
-            border-radius: 20px;
-            padding: 8px 14px;
+            background: linear-gradient(125deg, #181e32, #0f1324);
+            border-radius: 60px;
+            padding: 8px 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-size: 0.85rem;
+            border: 1px solid #2d3458;
+            transition: all 0.2s;
+            animation: slideInUp 0.2s ease;
         }
 
-        .calc-unit-name { font-weight: 600; }
-        .calc-unit-count { background: #2c3550; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; color: #ffdc97; }
-        .calc-unit-value { color: #f5b042; font-weight: 700; min-width: 70px; }
-        .calc-unit-controls { display: flex; gap: 6px; margin-left: 4px; }
-        .calc-unit-controls button { background: #2a2f48; border: none; color: white; width: 26px; height: 26px; border-radius: 13px; cursor: pointer; font-size: 0.9rem; }
-        .calculator-total { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid #1e2335; font-size: 1.2rem; flex-wrap: wrap; gap: 12px; }
-        .total-label { font-weight: 600; color: #b9c3f0; }
-        .total-value { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #f5b042, #ffdc97); background-clip: text; -webkit-background-clip: text; color: transparent; }
-        .empty-calc { color: #6f7aa3; text-align: center; padding: 20px; font-size: 0.85rem; width: 100%; }
+        .calc-unit:hover {
+            border-color: #f5b042;
+            transform: translateY(-2px);
+        }
+
+        .calc-unit-name { font-weight: 700; color: #f0e6d2; }
+        .calc-unit-count { background: #f5b04220; padding: 3px 12px; border-radius: 40px; font-size: 0.7rem; color: #f5b042; font-weight: bold; }
+        .calc-unit-value { color: #ffdf9c; font-weight: 800; min-width: 85px; }
+        .calc-unit-controls { display: flex; gap: 8px; margin-left: 6px; }
+        .calc-unit-controls button { background: #262e4e; border: none; color: white; width: 28px; height: 28px; border-radius: 30px; cursor: pointer; font-weight: bold; transition: 0.15s; }
+        .calc-unit-controls button:hover { background: #f5b042; color: #0f1222; transform: scale(1.05); }
+
+        .calculator-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 2px dashed rgba(245, 176, 66, 0.3);
+            font-size: 1.3rem;
+            flex-wrap: wrap;
+        }
+        .total-label { font-weight: 700; color: #cdd6ff; letter-spacing: 0.5px; }
+        .total-value { font-size: 2.2rem; font-weight: 900; background: linear-gradient(135deg, #ffdd99, #f5b042); background-clip: text; -webkit-background-clip: text; color: transparent; text-shadow: 0 0 5px rgba(0,0,0,0.2); }
+
+        .empty-calc {
+            color: #7e89b5;
+            text-align: center;
+            padding: 24px;
+            width: 100%;
+            font-style: italic;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0e17; }
+        ::-webkit-scrollbar-thumb { background: #f5b04260; border-radius: 8px; }
 
         @media (max-width: 800px) {
             .main-row { flex-direction: column; }
-            .categories-sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid #1e2335; }
+            .categories-sidebar { width: 100%; height: auto; position: relative; backdrop-filter: blur(20px); border-right: none; border-bottom: 1px solid #1e2335; }
+            .main-content { padding: 20px; }
         }
     </style>
 </head>
@@ -378,13 +535,17 @@
 <div class="app-layout">
     <div class="main-row">
         <div class="categories-sidebar">
-            <div class="categories-header">📂 CATEGORIES:</div>
+            <div class="categories-header" id="categoriesHeader">📂 CATEGORIES</div>
             <div id="categoriesList"></div>
-            <!-- Кнопка гарантов в отдельном блоке -->
-            <div style="padding: 0 16px; margin-top: 20px;">
-                <a href="https://t.me/GarantiFNS" target="_blank" id="garantButton" class="category-item garant-link" style="display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; margin: 0; padding: 12px 16px; border-radius: 40px; background: linear-gradient(135deg, #1a1f32, #0f1222); border: 1px solid #f5b042; transition: all 0.2s;">
-                    <span style="font-size: 1.2rem;">🛡️</span>
-                    <span style="font-weight: 700; font-size: 0.9rem; background: linear-gradient(135deg, #f5b042, #ffdc97); background-clip: text; -webkit-background-clip: text; color: transparent;">ГАРАНТЫ</span>
+            <!-- Language switch inside sidebar -->
+            <div class="language-tab">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="ru">RU</button>
+            </div>
+            <div style="padding: 0 16px; margin-top: 16px;">
+                <a href="https://t.me/GarantiFNS" target="_blank" id="garantButton" class="category-item garant-link" style="display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; margin: 0; padding: 12px 20px;">
+                    <span style="font-size: 1.3rem;">🛡️</span>
+                    <span id="guarantorsText" style="font-weight: 800; font-size: 0.9rem; background: linear-gradient(135deg, #f5b042, #ffdd99); background-clip: text; -webkit-background-clip: text; color: transparent;">GUARANTORS</span>
                     <span style="font-size: 1rem;">→</span>
                 </a>
             </div>
@@ -393,13 +554,13 @@
         <div class="main-content">
             <div class="partner-bar">
                 <div class="partner">
-                    <span>partner:</span>
+                    <span id="partnerLabel">partner:</span>
                     <span class="partner-creator">@Kola2_l</span>
                     <span class="partner-creator">@Xmyrni_Alkogolik</span>
                     <span class="partner-creator">@Fotty46</span>
                     <span class="partner-creator">@vvblaze74</span>
                 </div>
-                <div class="take-me-there">Take me there →</div>
+                <div class="take-me-there" id="takeMeThere">Take me there →</div>
             </div>
 
             <div class="control-panel">
@@ -418,7 +579,7 @@
                     <button id="clearBtn">Clear</button>
                 </div>
                 <div class="sort-by">
-                    <span>Sort by:</span>
+                    <span id="sortLabel">Sort by:</span>
                     <select id="sortSelect">
                         <option value="value-high">Value (High→Low)</option>
                         <option value="value-low">Value (Low→High)</option>
@@ -427,7 +588,7 @@
             </div>
 
             <div class="tier-section">
-                <div class="tier-title">✦ TTD Value List</div>
+                <div class="tier-title" id="tierTitle">✦ TTD Value List</div>
                 <div id="itemsGrid" class="items-grid"></div>
             </div>
         </div>
@@ -435,14 +596,14 @@
 
     <div class="calculator-section">
         <div class="calculator-header">
-            <div class="calculator-title">🧮 VALUE CALCULATOR</div>
-            <button id="clearCalculatorBtn" class="clear-calc-btn">🗑️ Clear All</button>
+            <div class="calculator-title" id="calcTitle">🧮 VALUE CALCULATOR</div>
+            <button id="clearCalculatorBtn" class="clear-calc-btn" id="clearCalcBtn">🗑️ Clear All</button>
         </div>
         <div id="calculatorItemsList" class="calculator-items">
-            <div class="empty-calc">No units added. Click +1 on any unit to add to calculator.</div>
+            <div class="empty-calc" id="emptyCalcMsg">No units added. Click +1 on any unit to add to calculator.</div>
         </div>
         <div class="calculator-total">
-            <span class="total-label">💰 TOTAL VALUE:</span>
+            <span class="total-label" id="totalLabel">💰 TOTAL VALUE:</span>
             <div><span class="total-value" id="calculatorTotal">0</span></div>
         </div>
     </div>
@@ -487,6 +648,90 @@
     const rarityOrder = ["Basic", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Exclusive"];
     let currentCategory = "Basic";
     let calculatorItems = [];
+    let currentLang = "en";
+
+    const translations = {
+        en: {
+            categoriesHeader: "📂 CATEGORIES",
+            guarantors: "GUARANTORS",
+            partnerLabel: "partner:",
+            takeMeThere: "Take me there →",
+            searchPlaceholder: "Type item name here... Search In-Page",
+            stabilityPlaceholder: "Select Stability ▼",
+            filterBtn: "Filter Items",
+            clearBtn: "Clear",
+            sortLabel: "Sort by:",
+            sortHigh: "Value (High→Low)",
+            sortLow: "Value (Low→High)",
+            tierTitle: "✦ TTD Value List",
+            calcTitle: "🧮 VALUE CALCULATOR",
+            clearCalc: "🗑️ Clear All",
+            emptyCalc: "No units added. Click +1 on any unit to add to calculator.",
+            totalLabel: "💰 TOTAL VALUE:",
+            valueLabel: "Value",
+            stabilityLabel: "Stability",
+            rarityLabel: "Rarity",
+            lastChangeLabel: "Last Change in Value",
+            noResults: (cat) => `✨ No units in ${cat} category ✨`,
+            doingWell: "Doing Well",
+            stable: "Stable",
+            underpaid: "Underpaid For",
+            overpaid: "Overpaid For"
+        },
+        ru: {
+            categoriesHeader: "📂 КАТЕГОРИИ",
+            guarantors: "ГАРАНТЫ",
+            partnerLabel: "партнёры:",
+            takeMeThere: "Перейти →",
+            searchPlaceholder: "Введите название... Поиск",
+            stabilityPlaceholder: "Выберите стабильность ▼",
+            filterBtn: "Фильтровать",
+            clearBtn: "Сброс",
+            sortLabel: "Сортировка:",
+            sortHigh: "Цена (Выс→Низ)",
+            sortLow: "Цена (Низ→Выс)",
+            tierTitle: "✦ TTD Список Цен",
+            calcTitle: "🧮 КАЛЬКУЛЯТОР ЦЕН",
+            clearCalc: "🗑️ Очистить всё",
+            emptyCalc: "Нет добавленных юнитов. Нажмите +1 на любом юните, чтобы добавить в калькулятор.",
+            totalLabel: "💰 ОБЩАЯ СТОИМОСТЬ:",
+            valueLabel: "Цена",
+            stabilityLabel: "Стабильность",
+            rarityLabel: "Редкость",
+            lastChangeLabel: "Последнее изменение",
+            noResults: (cat) => `✨ Нет юнитов в категории ${cat} ✨`,
+            doingWell: "Растёт",
+            stable: "Стабильно",
+            underpaid: "Недооценён",
+            overpaid: "Переоценён"
+        }
+    };
+
+    function updateLanguage() {
+        const t = translations[currentLang];
+        document.getElementById('categoriesHeader').innerText = t.categoriesHeader;
+        document.getElementById('guarantorsText').innerText = t.guarantors;
+        document.getElementById('partnerLabel').innerText = t.partnerLabel;
+        document.getElementById('takeMeThere').innerText = t.takeMeThere;
+        document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+        const stabilitySelect = document.getElementById('stabilitySelect');
+        stabilitySelect.options[0].text = t.stabilityPlaceholder;
+        document.getElementById('filterBtn').innerText = t.filterBtn;
+        document.getElementById('clearBtn').innerText = t.clearBtn;
+        document.getElementById('sortLabel').innerText = t.sortLabel;
+        const sortSelect = document.getElementById('sortSelect');
+        sortSelect.options[0].text = t.sortHigh;
+        sortSelect.options[1].text = t.sortLow;
+        document.getElementById('tierTitle').innerText = t.tierTitle;
+        document.getElementById('calcTitle').innerText = t.calcTitle;
+        document.getElementById('clearCalculatorBtn').innerText = t.clearCalc;
+        document.getElementById('emptyCalcMsg').innerText = t.emptyCalc;
+        document.getElementById('totalLabel').innerHTML = t.totalLabel;
+        // re-render categories and items to update texts
+        renderCategories();
+        applyFiltersAndRender();
+        updateCalculatorUI();
+    }
 
     function getStabilityClass(stability) {
         if (stability === "Doing Well") return "doing-well";
@@ -496,13 +741,22 @@
         return "stable";
     }
 
+    function getStabilityLocalized(stability) {
+        const t = translations[currentLang];
+        if (stability === "Doing Well") return t.doingWell;
+        if (stability === "Stable") return t.stable;
+        if (stability === "Underpaid For") return t.underpaid;
+        if (stability === "Overpaid For") return t.overpaid;
+        return stability;
+    }
+
     function getCalculatorTotal() { return calculatorItems.reduce((sum, item) => sum + item.currentValue, 0); }
 
     function updateCalculatorUI() {
         const container = document.getElementById('calculatorItemsList');
         const totalSpan = document.getElementById('calculatorTotal');
         if (calculatorItems.length === 0) {
-            container.innerHTML = '<div class="empty-calc">No units added. Click +1 on any unit to add to calculator.</div>';
+            container.innerHTML = `<div class="empty-calc">${translations[currentLang].emptyCalc}</div>`;
             totalSpan.innerText = '0';
             return;
         }
@@ -592,23 +846,25 @@
     function renderItems() {
         const filtered = getFilteredItems();
         const grid = document.getElementById('itemsGrid');
-        if (!filtered.length) { grid.innerHTML = `<div class="no-results">✨ No units in ${currentCategory} category ✨</div>`; return; }
+        const t = translations[currentLang];
+        if (!filtered.length) { grid.innerHTML = `<div class="no-results">${t.noResults(currentCategory)}</div>`; return; }
         let html = '';
         filtered.forEach(unit => {
             const stabilityClass = getStabilityClass(unit.stability);
+            const stabilityLocal = getStabilityLocalized(unit.stability);
             html += `<div class="item-card">
                         <div class="item-name">${unit.name}</div>
                         <div class="value-row">
-                            <span class="value-label">Value</span>
+                            <span class="value-label">${t.valueLabel}</span>
                             <div class="value-control">
                                 <button class="dec-btn" data-id="${unit.id}">-1</button>
                                 <span class="current-value">${unit.baseValue.toLocaleString()}</span>
                                 <button class="inc-btn" data-id="${unit.id}">+1</button>
                             </div>
                         </div>
-                        <div class="detail-row"><span class="detail-label">Stability</span><span class="detail-value"><span class="stability-badge ${stabilityClass}">${unit.stability}</span></span></div>
-                        <div class="detail-row"><span class="detail-label">Rarity</span><span class="detail-value">${unit.rarity}</span></div>
-                        <div class="detail-row"><span class="detail-label">Last Change in Value</span><span class="detail-value">${unit.lastChange}</span></div>
+                        <div class="detail-row"><span class="detail-label">${t.stabilityLabel}</span><span class="detail-value"><span class="stability-badge ${stabilityClass}">${stabilityLocal}</span></span></div>
+                        <div class="detail-row"><span class="detail-label">${t.rarityLabel}</span><span class="detail-value">${unit.rarity}</span></div>
+                        <div class="detail-row"><span class="detail-label">${t.lastChangeLabel}</span><span class="detail-value">${unit.lastChange}</span></div>
                     </div>`;
         });
         grid.innerHTML = html;
@@ -617,6 +873,7 @@
     }
 
     function applyFiltersAndRender() { renderItems(); }
+    
     function bindFilters() {
         document.getElementById('searchInput').addEventListener('input', () => applyFiltersAndRender());
         document.getElementById('filterBtn').addEventListener('click', () => applyFiltersAndRender());
@@ -628,6 +885,16 @@
         });
         document.getElementById('sortSelect').addEventListener('change', () => applyFiltersAndRender());
         document.getElementById('clearCalculatorBtn').addEventListener('click', () => clearCalculator());
+        
+        // Language switch
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLang = btn.getAttribute('data-lang');
+                updateLanguage();
+            });
+        });
     }
 
     function init() {
@@ -635,6 +902,7 @@
         bindFilters();
         applyFiltersAndRender();
         updateCalculatorUI();
+        updateLanguage();
     }
     
     init();
