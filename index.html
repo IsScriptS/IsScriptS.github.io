@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>TTD Value List - Розыгрыш</title>
+    <title>TTD Value List</title>
     <style>
         * {
             margin: 0;
@@ -78,6 +78,18 @@
             font-weight: 500;
         }
 
+        /* Специальный стиль для кнопки гарантов */
+        .category-item.garant-link {
+            margin-top: 16px;
+            border: 1px solid #f5b04230;
+            background: linear-gradient(135deg, #1a1f32, #1f253f);
+        }
+
+        .category-item.garant-link:hover {
+            border-color: #f5b042;
+            background: linear-gradient(135deg, #2a3050, #2a354f);
+        }
+
         .category-icon {
             font-size: 1rem;
         }
@@ -122,184 +134,6 @@
             padding: 6px 14px;
             border-radius: 40px;
             font-size: 0.8rem;
-        }
-
-        /* Розыгрыш */
-        .giveaway-section {
-            background: linear-gradient(135deg, #1a1f32, #0f1222);
-            border-radius: 24px;
-            padding: 20px 24px;
-            margin-bottom: 24px;
-            border: 1px solid #f5b04230;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .giveaway-section::before {
-            content: "🎲";
-            position: absolute;
-            right: -20px;
-            top: -20px;
-            font-size: 120px;
-            opacity: 0.05;
-            pointer-events: none;
-        }
-
-        .giveaway-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .giveaway-btn {
-            background: linear-gradient(135deg, #f5b042, #e67e22);
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 700;
-            padding: 12px 28px;
-            border-radius: 60px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 15px rgba(245, 176, 66, 0.3);
-        }
-
-        .giveaway-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 20px rgba(245, 176, 66, 0.4);
-        }
-
-        .giveaway-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #f5b042, #ffdc97);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        .rules-panel {
-            background: #0c1020;
-            border-radius: 20px;
-            padding: 16px 20px;
-            margin-top: 16px;
-            display: none;
-        }
-
-        .rules-panel.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .rules-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #f5b042;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .rules-list {
-            list-style: none;
-            padding-left: 20px;
-        }
-
-        .rules-list li {
-            margin: 10px 0;
-            font-size: 0.85rem;
-            color: #b0b9dc;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .rules-list li::before {
-            content: "🎁";
-            font-size: 0.8rem;
-        }
-
-        .prize-preview {
-            background: #1a1f32;
-            border-radius: 16px;
-            padding: 12px 16px;
-            margin-top: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .prize-name {
-            font-weight: 700;
-            color: #f5b042;
-            font-size: 1.1rem;
-        }
-
-        .timer {
-            font-family: monospace;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #ffdc97;
-        }
-
-        .join-status {
-            margin-top: 12px;
-            padding: 10px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            text-align: center;
-        }
-
-        .join-status.success { background: #1f5733; color: #b8ffcf; }
-        .join-status.error { background: #6b2e4a; color: #ffbcda; }
-        .join-status.warning { background: #7a5a2c; color: #ffe1a0; }
-        .join-status.info { background: #2c5f8a; color: #b8e2ff; }
-
-        .register-btn {
-            background: #2c3550;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 12px;
-            width: 100%;
-            transition: 0.2s;
-        }
-
-        .register-btn.registered {
-            background: #1f5733;
-            color: #b8ffcf;
-        }
-
-        .chat-link {
-            display: inline-block;
-            background: #1a1f32;
-            padding: 4px 12px;
-            border-radius: 30px;
-            color: #f5b042;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-
-        .chat-link:hover {
-            background: #2c3550;
-            transform: scale(1.02);
         }
 
         .control-panel {
@@ -546,6 +380,14 @@
         <div class="categories-sidebar">
             <div class="categories-header">📂 CATEGORIES:</div>
             <div id="categoriesList"></div>
+            <!-- Кнопка гарантов в отдельном блоке -->
+            <div style="padding: 0 16px; margin-top: 20px;">
+                <a href="https://t.me/GarantiFNS" target="_blank" id="garantButton" class="category-item garant-link" style="display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; margin: 0; padding: 12px 16px; border-radius: 40px; background: linear-gradient(135deg, #1a1f32, #0f1222); border: 1px solid #f5b042; transition: all 0.2s;">
+                    <span style="font-size: 1.2rem;">🛡️</span>
+                    <span style="font-weight: 700; font-size: 0.9rem; background: linear-gradient(135deg, #f5b042, #ffdc97); background-clip: text; -webkit-background-clip: text; color: transparent;">ГАРАНТЫ</span>
+                    <span style="font-size: 1rem;">→</span>
+                </a>
+            </div>
         </div>
 
         <div class="main-content">
@@ -558,29 +400,6 @@
                     <span class="partner-creator">@vvblaze74</span>
                 </div>
                 <div class="take-me-there">Take me there →</div>
-            </div>
-
-            <!-- РОЗЫГРЫШ -->
-            <div class="giveaway-section">
-                <div class="giveaway-header">
-                    <button id="giveawayBtn" class="giveaway-btn">🎲 РОЗЫГРЫШ ЛЕГЕНДАРКИ</button>
-                    <span class="giveaway-title">⚡ Участвуй и выиграй!</span>
-                </div>
-                <div id="rulesPanel" class="rules-panel">
-                    <div class="rules-title">📜 ПРАВИЛА УЧАСТИЯ</div>
-                    <ul class="rules-list">
-                        <li>Быть в чате <a href="https://t.me/gavegalonuGroup" target="_blank" class="chat-link">@gavegalonuGroup</a> 📱</li>
-                        <li>Написать в чат <strong style="color:#ffdc97">"я люблю этот чат"</strong> ровно в <strong style="color:#ffdc97">18:00 по МСК</strong></li>
-                        <li><strong style="color:#ffdc97">Первый, кто напишет</strong> — забирает легендарку! 🏆</li>
-                    </ul>
-                    <div class="prize-preview">
-                        <span>🏆 ПРИЗ:</span>
-                        <span class="prize-name" id="prizeName">🎲 Случайная легендарка...</span>
-                        <span id="timerDisplay" class="timer">--:--:--</span>
-                    </div>
-                    <button id="registerBtn" class="register-btn">📝 ЗАРЕГИСТРИРОВАТЬСЯ НА УВЕДОМЛЕНИЕ</button>
-                    <div id="joinStatus" class="join-status" style="display: none;"></div>
-                </div>
             </div>
 
             <div class="control-panel">
@@ -630,7 +449,6 @@
 </div>
 
 <script>
-    // ЮНИТЫ
     const unitsDatabase = [
         { id: 1, name: "Camerawoman", rarity: "Basic", baseValue: 1, stability: "Underpaid For", lastChange: "+0", category: "Basic" },
         { id: 2, name: "Speakerman", rarity: "Basic", baseValue: 0, stability: "Stable", lastChange: "+0", category: "Basic" },
@@ -666,85 +484,6 @@
         { id: 32, name: "Engineer Cameraman", rarity: "Exclusive", baseValue: 15000, stability: "Overpaid For", lastChange: "+500", category: "Exclusive" }
     ];
 
-    const legendaryItems = unitsDatabase.filter(u => u.rarity === "Legendary");
-    function getRandomLegendary() { return legendaryItems[Math.floor(Math.random() * legendaryItems.length)]; }
-
-    // Глобальные переменные
-    let isRegistered = false;
-    let hasNotified5min = false;
-    let currentPrize = getRandomLegendary();
-
-    function updatePrizeDisplay() {
-        currentPrize = getRandomLegendary();
-        document.getElementById('prizeName').innerHTML = `🎲 ${currentPrize.name} (${currentPrize.baseValue} value)`;
-    }
-
-    function getMskTime() {
-        return new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Moscow" }));
-    }
-
-    function getSecondsUntil18() {
-        const now = getMskTime();
-        const target = new Date(now);
-        target.setHours(18, 0, 0, 0);
-        if (now >= target) target.setDate(target.getDate() + 1);
-        return Math.floor((target - now) / 1000);
-    }
-
-    function updateTimer() {
-        const timerElement = document.getElementById('timerDisplay');
-        const seconds = getSecondsUntil18();
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const secs = seconds % 60;
-        timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        
-        // За 5 минут до 18:00 уведомление
-        if (isRegistered && seconds <= 300 && seconds > 0 && !hasNotified5min) {
-            hasNotified5min = true;
-            const statusDiv = document.getElementById('joinStatus');
-            statusDiv.style.display = 'block';
-            statusDiv.className = 'join-status info';
-            statusDiv.innerHTML = '⏰ ВНИМАНИЕ! До розыгрыша 5 минут! Заходите в чат @gavegalonuGroup и готовьтесь написать "я люблю этот чат" ровно в 18:00! ⏰';
-            setTimeout(() => {
-                statusDiv.style.opacity = '0';
-                setTimeout(() => {
-                    if (statusDiv.style.display !== 'none') statusDiv.style.display = 'none';
-                    statusDiv.style.opacity = '1';
-                }, 5000);
-            }, 10000);
-        }
-    }
-
-    function register() {
-        if (isRegistered) {
-            const statusDiv = document.getElementById('joinStatus');
-            statusDiv.style.display = 'block';
-            statusDiv.className = 'join-status warning';
-            statusDiv.innerHTML = '⚠️ Вы уже зарегистрированы на уведомление!';
-            setTimeout(() => {
-                statusDiv.style.opacity = '0';
-                setTimeout(() => { statusDiv.style.display = 'none'; statusDiv.style.opacity = '1'; }, 2000);
-            }, 3000);
-            return;
-        }
-        
-        isRegistered = true;
-        const registerBtn = document.getElementById('registerBtn');
-        registerBtn.textContent = '✅ ВЫ ЗАРЕГИСТРИРОВАНЫ';
-        registerBtn.classList.add('registered');
-        
-        const statusDiv = document.getElementById('joinStatus');
-        statusDiv.style.display = 'block';
-        statusDiv.className = 'join-status success';
-        statusDiv.innerHTML = '✅ Вы успешно зарегистрированы! За 5 минут до 18:00 МСК придёт уведомление. Заходите в чат и будьте первым! 🍀';
-        setTimeout(() => {
-            statusDiv.style.opacity = '0';
-            setTimeout(() => { statusDiv.style.display = 'none'; statusDiv.style.opacity = '1'; }, 3000);
-        }, 4000);
-    }
-
-    // Код калькулятора и фильтров
     const rarityOrder = ["Basic", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Exclusive"];
     let currentCategory = "Basic";
     let calculatorItems = [];
@@ -829,8 +568,12 @@
             html += `<div class="category-item ${activeClass}" data-category="${rarity}"><span class="category-icon">🐟</span><span>${rarity}</span></div>`;
         });
         container.innerHTML = html;
-        document.querySelectorAll('.category-item').forEach(el => {
-            el.addEventListener('click', () => { currentCategory = el.getAttribute('data-category'); renderCategories(); applyFiltersAndRender(); });
+        document.querySelectorAll('.category-item:not(.garant-link)').forEach(el => {
+            el.addEventListener('click', () => { 
+                currentCategory = el.getAttribute('data-category'); 
+                renderCategories(); 
+                applyFiltersAndRender(); 
+            });
         });
     }
 
@@ -892,30 +635,6 @@
         bindFilters();
         applyFiltersAndRender();
         updateCalculatorUI();
-        
-        const giveawayBtn = document.getElementById('giveawayBtn');
-        const rulesPanel = document.getElementById('rulesPanel');
-        let isRulesOpen = false;
-        
-        updatePrizeDisplay();
-        setInterval(updatePrizeDisplay, 30000);
-        setInterval(updateTimer, 1000);
-        updateTimer();
-        
-        giveawayBtn.addEventListener('click', () => {
-            if (!isRulesOpen) {
-                rulesPanel.classList.add('show');
-                isRulesOpen = true;
-                giveawayBtn.textContent = '🎲 ЗАКРЫТЬ РОЗЫГРЫШ';
-            } else {
-                rulesPanel.classList.remove('show');
-                isRulesOpen = false;
-                giveawayBtn.textContent = '🎲 РОЗЫГРЫШ ЛЕГЕНДАРКИ';
-                document.getElementById('joinStatus').style.display = 'none';
-            }
-        });
-        
-        document.getElementById('registerBtn').addEventListener('click', register);
     }
     
     init();
